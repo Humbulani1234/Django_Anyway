@@ -1,3 +1,7 @@
+import tracemalloc
+
+tracemalloc.start()
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import sys
@@ -210,6 +214,9 @@ def inputs(request):
 
     return render(request, 'features.html', {'form':form,'side_bar':side_bar,'answer':answer})
 
+print(tracemalloc.get_traced_memory())
+
+tracemalloc.stop()
 
 # def Sides(request):
 

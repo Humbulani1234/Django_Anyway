@@ -118,8 +118,6 @@ def Split_Xtrain_Ytrain(dataframe_float, dataframe_categorical,target, testsize,
               , target = ED.df_loan_float["GB"])
 
     X_train_lgd, X_test_lgd, Y_train_lgd, Y_test_lgd = train_test_split(X, Y, test_size=0.33, random_state=42)
-    print(X_train_lgd.shape)
-    print(Y_train_lgd.shape)
     
     return X_train_lgd, X_test_lgd, Y_train_lgd, Y_test_lgd
 

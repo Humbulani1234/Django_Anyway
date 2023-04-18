@@ -49,48 +49,7 @@
 <div class="container">
     <img src="{% static 'main.jpg' %}" alt="No Picture" style="width:900px;height:260px;" class="center">
 </div>
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light"> 
- <div class="container-fluid"> 
-    <form class="form-horizontal" method="POST">
-        {% csrf_token %}
-            {% if side_bar.non_field_errors %}
-             <div class="alert alert-danger" role="alert" class="form-group form-group-lg">
-                 {% for error in side_bar.non_field_errors %}
-                  {{ error }}
-                 {% endfor %}
-             </div>
-             {% endif %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Calculate Probability</legend>
-                {% for field in side_bar.visible_fields  %}
-                  <div class="form-group" width=3px>
-                    {{ field.label_tag }}
-                    {% if side_bar.is_bound %}
-                      {% if field.errors %}
-                        {% render_field field class="form-control is-invalid form-control-lg"  %}
-                          {% for error in field.errors %}
-                            <div class="invalid-feedback">
-                                {{ error }}
-                            </div>
-                           {% endfor %}
-                        {% else %}
-                          {% render_field field class="form-control is-valid form-control-lg width=0.5px" %}
-                        {% endif %}
-                      {% else %}
-                        {% render_field field class="form-control form-control-lg width=0.5px" %}
-                      {% endif %}
-                    {% if filed.help_text %} 
-                      <small class="form-text text-muted">{{ field.help_text }}</small>
-                    {% endif %}
-                  </div>
-                 {% endfor %} 
-            </fieldset> 
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">Submit</button>
-            </div> 
-    </form>
- </div> 
-</nav> -->
+
 <div class="container"> 
    <div class="content-section"> 
         <form method="POST" class="form-horizontal">
