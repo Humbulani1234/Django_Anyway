@@ -1,5 +1,4 @@
 
-
 # ==================
 # Diagonostics Tests
 # ==================
@@ -46,10 +45,8 @@ def Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
     
     res = function(X_train, Y_train)[1]
     predict_probability = Model_Perf.Prediction(function, X_test, X_train, Y_train)
-    print(Y_test.shape[0])
-    print(predict_probability)
     for i in range(Y_test.shape[0]):
-    # print(Y_test.shape[0])
+
         if predict_probability[i] < threshold: 
             u1 = np.random.uniform(low=0,high=predict_probability[i])
             Quantile_Residuals.append(norm.ppf(u1))
@@ -58,14 +55,14 @@ def Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
             u2 = np.random.uniform(low=predict_probability[i],high=1)
             Quantile_Residuals.append(norm.ppf(u2))
     
-    #Quantile_Residuals  
     Quantile_Residuals_Series = pd.Series(Quantile_Residuals)
     
-    # print(Y_test.shape[0])
     return Quantile_Residuals_Series
+
 # d = Quantile_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
 #             ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-# print(d)
+
+
 # ===============
 # Residuals plot
 # ===============
@@ -75,7 +72,7 @@ def Plot_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
     Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
     Quantile_Residuals_Series.plot()
     
-    return #plt.show()
+    return plt.show()
 
 # =====================================================
 # Breush Pagan Test for Hetereskedasticity of variance
@@ -101,7 +98,7 @@ def Normal_Residual_Test(function, X_test, Y_test, X_train, Y_train, threshold):
 
     normal_test = scipy.stats.normaltest(Quantile_Residuals_Series)
     
-    return normal_test, #pylab.show()
+    return normal_test, pylab.show()
 
 # ===========================================================
 # Durbin Watson Test for Residuals correlation range(1,5 - 2)
@@ -124,14 +121,12 @@ def Partial_Plots(function, independent, X_test, Y_test, X_train, Y_train, thres
     Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
     plt.scatter(independent, Quantile_Residuals_Series)
     
-    return #plt.show()
+    return plt.show()
 
 # =======================
 # Outliers and Influence
 # =======================
-# res = GLM_Bino.GLM_Binomial_fit(train_test.X_train, train_test.Y_train)[1]
-# hat_matrix = res.get_hat_matrix_diag()
-# #print(hat_matrix)
+
 
 def Leverage_Studentized_Quantile_Res(function, X_test, Y_test, X_train, Y_train, threshold):
 
@@ -139,7 +134,6 @@ def Leverage_Studentized_Quantile_Res(function, X_test, Y_test, X_train, Y_train
     Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
     
     hat_matrix = np.round(res.get_hat_matrix_diag(),2)
-    #print(hat_matrix.tolist())
 
     lev_stud_res = []
 
@@ -149,11 +143,12 @@ def Leverage_Studentized_Quantile_Res(function, X_test, Y_test, X_train, Y_train
 
     pd.Series(lev_stud_res).plot()
     
-    return #plt.show()
+    return plt.show()
 
 # f = Leverage_Studentized_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
 #             ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-# print(f)
+
+
 # ================
 # Cook's Distance
 # ================
@@ -172,4 +167,4 @@ def Cooks_Distance_Quantile_Res(function, X_test, Y_test, X_train, Y_train, thre
 
     pd.Series(D).plot()
     
-    return #plt.show()
+    return plt.show()

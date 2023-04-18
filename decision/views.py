@@ -1,56 +1,20 @@
-from django.shortcuts import render
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import sys
 import os
+
 sys.path.append('/home/humbulani/New/django_project/')
-#sys.path.append('/home/humbulani/PD/django_project/django_project')
-print(sys.path)
+
 from .forms import In, Si
 
 from django.templatetags.static import static
-url = static('KGB.sas7bdat')
-print(os.getcwd())
+#url = static('KGB.sas7bdat')
+#print(os.getcwd())
 
-# from django_project.settings import BASE_DIR
-# path = '/home/humbulani/PD/django_project/deploy/static/KGB.sas7bdat'
-
-#import streamlit as st 
-import ED
-# df_loan = ED.Data_download(file_path = path)
-# print(df_loan)
-import train_test
-#import Model_Perf
-import matplotlib.pyplot as plt
-#import GLM_Bino
-import warnings
-import missing_adhoc
 import pandas as pd
-#from PIL import Image
-#import clustering
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-#import Diagnostics
-from scipy.stats import norm
-import pylab
-#import statsmodels.stats.diagnostic as sd
-#from statsmodels.stats.stattools import durbin_watson
-#import statsmodels.api as sm
-import scipy
-from scipy import stats
-from math import *
-from sklearn.tree import DecisionTreeClassifier
-import train_test1
-from sklearn.tree import plot_tree
-from sklearn.model_selection import cross_validate
-from sklearn.model_selection import cross_val_score
 import numpy as np
 import Decision_tree
-#
-
-# def result(request):
-
-#     return render(request, 'results.html', {'answer': answer})
 
 
 def tree(request):
@@ -248,8 +212,6 @@ def tree(request):
 
     return render(request, 'decision.html', {'form':form,'side_bar':side_bar,'answer':answer})
 
-    
-	#inputs(request.POST)
 
 # def Sides(request):
 

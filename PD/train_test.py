@@ -46,7 +46,6 @@ def One_Hot_Encoding_Func_Stat(dataframe):
     return df_loan_categorical_encoded
 
 df_loan_categorical_encoded = One_Hot_Encoding_Func_Stat(missing_adhoc.df_loan_categorical_mode)
-# print(df_loan_categorical_encoded)
 
 # ==================================
 # Machine Learning One Hot Encoding
@@ -67,7 +66,6 @@ def One_Hot_Encoding_Func_Machi(dataframe):
     return df_loan_categorical_encoded
 
 #df_loan_categorical_encoded = One_Hot_Encoding_Func_Machi(missing_adhoc.df_loan_categorical_mode)
-#print(df_loan_categorical_encoded)
 
 # ================================================
 # Sample partitioning into train and testing sets
@@ -85,8 +83,8 @@ def Create_X_Y(dataframe_float, dataframe_categorical, target):
     
     return X, Y
 
-X, Y = Create_X_Y(dataframe_float = ED.df_loan_float, dataframe_categorical = df_loan_categorical_encoded\
-              , target = ED.df_loan_float["GB"])
+# X, Y = Create_X_Y(dataframe_float = ED.df_loan_float, dataframe_categorical = df_loan_categorical_encoded\
+#               , target = ED.df_loan_float["GB"])
 
 # ============================================
 # Defining Independent and Dependent variables
@@ -108,7 +106,6 @@ def Sample_Imbalance(dataframe_total):
     return 
 
 #Imbalance = Sample_Imbalance(dataframe_total=ED.df_loan_float["GB"])
-#print(Imbalance)
 
 # ============================
 # Training and Testing samples
@@ -132,50 +129,3 @@ X_train, X_test, Y_train, Y_test = Split_Xtrain_Ytrain(ED.df_loan_float, df_loan
 X_train = X_train.drop(labels=["_freq_"], axis=1) # temp, for mach it has to be dropped
 
 X_test = X_test.drop(labels=["_freq_"], axis=1) # temp
-
-# with open('test.csv', 'w') as f:
-#     g = str(X_test.iloc[0].tolist())
-#     f.write(g)
-
-#import pandas as pd
-
-# def getDuplicateColumns(df):
-
-#     # Create an empty set
-#     duplicateColumnNames = set()
-
-#     # Iterate through all the columns
-#     # of dataframe
-#     for x in range(df.shape[1]):
-
-#         # Take column at xth index.
-#         col = df.iloc[:, x]
-
-#         # Iterate through all the columns in
-#         # DataFrame from (x + 1)th index to
-#         # last index
-#         for y in range(x + 1, df.shape[1]):
-
-#             # Take column at yth index.
-#             otherCol = df.iloc[:, y]
-
-#             # Check if two columns at x & y
-#             # index are equal or not,
-#             # if equal then adding
-#             # to the set
-#             if col.equals(otherCol):
-#                 duplicateColumnNames.add(df.columns.values[y])
-
-#     # Return list of unique column names
-#     # whose contents are duplicates.
-#     return list(duplicateColumnNames)
-
-
-#     # Get list of duplicate columns
-#     #duplicateColNames = getDuplicateColumns(df)
-
-#     #for column in duplicateColNames:
-#         #print('Column Name : ', column)
-
-# b = getDuplicateColumns(X_test)
-# print(b)

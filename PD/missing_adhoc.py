@@ -7,8 +7,6 @@
 # Plots
 # ======
 
-#if __name__ == '__main__':
-
 import ED
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -53,9 +51,6 @@ def Categorical_missingness_Crosstab_Plot(independent, target):
 
     ax = cross_tab.plot(kind='bar', width=0.15, ylabel="Number Absorbed",color=["#003A5D","#A19958"]\
    ,edgecolor="tab:grey",linewidth=1.5)
-    
-    #print(ax)
-    #print(ax.containers)
 
     l = {"Not-Absorbed":"#003A5D", "Absorbed":"#A19958"}
     labels = list(l.keys())
@@ -78,8 +73,6 @@ def Categorical_missingness_Crosstab_Plot(independent, target):
      
     return cross_tab
 
-#answer = Categorical_missingness_Crosstab_Plot(ED.df_loan_categorical["RESID"], ED.df_loan_float["GB"])
-
 #logger.debug('Categorical_missingness_Crosstab_Plot: {}, {}={}'.format(ED.df_loan_categorical["RESID"].tolist(), ED.df_loan_float["GB"].tolist()\
     #, answer))
 
@@ -96,15 +89,7 @@ def Categorical_missingness_Pivot_Plot(independent, target):
                          , edgecolor="tab:grey",linewidth=1.5)
 
     d.legend(title="legend", bbox_to_anchor=(1, 1.02), loc='upper left', fontsize=6.5, shadow=True)
-    #print(d.containers)
-    #print(d)
-
-
-    #l = {"No":"#548235", "Yes":"#003A5D"}
-    #labels = list(l.keys())
-    #handles = [plt.Rectangle((5,5),10,10, color=l[label]) for label in labels]
-    #plt.legend(handles, labels, fontsize=6, bbox_to_anchor=(1.05,1.08), loc="upper left", title="legend",shadow=True)
-
+    
     plt.title("Race and Absorption for Gender", fontsize=7.5, pad=12)
     plt.xlabel('Absorbed', fontsize=7)
     plt.xticks(fontsize=7)
@@ -117,30 +102,8 @@ def Categorical_missingness_Pivot_Plot(independent, target):
     for pos in ["right", "top"]:
         plt.gca().spines[pos].set_visible(False)
 
-    #for bar in bars:
-        
-        #yval = bar.get_height()
-        #plt.text(bar.get_x(), yval + .3, yval, fontsize=9)
-        
-    #for i in range(0,2): 
-        #for j in range(0,3):
-            
-            #if i == 0 and j == 1:
-        #yval = d.containers[i].get_height()
-        #plt.text(d.containers[i].get_x(), yval + yval)
-        #yval = (d.containers[i].get_height())
-        #plt.text(d.containers[i].get_x(), yval + 0.5, yval)
-        
-    #for i in range(0,2):
-        
-            #p = str(bars2[i].get_height())
-            #yval = bars2[i].get_height()
-            #plt.text(bars2[i].get_x(), yval + 1.1, p,fontsize=9)
-    
-    return df_pivot
 
-#ans = Categorical_missingness_Pivot_Plot(ED.df_loan_categorical["RESID"], ED.df_loan_float["GB"])
-#print(ans)
+    return df_pivot
 
 # ======
 # Tests
@@ -155,9 +118,6 @@ def Chi_Square_Missingness_Categorical_Test(independent, target):
     chi_val, p_val, dof, expected = chi2_contingency(h_chi)
     
     return chi_val, p_val
-
-#ans = Chi_Square_Missingness_Categorical_Test(ED.df_loan_categorical["RESID"], ED.df_loan_float["GB"])
-#print(ans)
 
 # ===============================================================================================================================
 
@@ -174,7 +134,6 @@ def Simple_Imputer_mode(dataframe):
     return df_loan_categorical_mode
 
 df_loan_categorical_mode = Simple_Imputer_mode(dataframe=ED.df_loan_categorical)
-#print(df_loan_categorical_mode)
 
 # ================
 # Ordinal Encoding
@@ -192,9 +151,6 @@ def Ordinal_Encode_with_NAN(independent_series, dataframe): # for one column, th
     dataframe.loc[independent_series.notnull(), independent_series.name] = np.squeeze(encoded_vals)
     
     return dataframe
-
-#ans = Ordinal_Encode_with_NAN(ED.df_loan_categorical["RESID"],ED.df_loan_categorical)
-#print(ans)
 
 # ===============
 # KNN Imputation

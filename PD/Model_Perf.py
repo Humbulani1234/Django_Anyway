@@ -25,18 +25,16 @@ def ROC_Curve_Analytics(function, X_test, Y_test, X_train, Y_train):
     predict_probability = res.predict(X_test)
 
     fpr,tpr,thresholds = metrics.roc_curve(Y_test, predict_probability)
-    
-    #Roc plot
 
     plt.plot(fpr,tpr)
-    #plt.show()
 
     optimal_idx = np.argmax(tpr-fpr)
     optimal_thres = thresholds[optimal_idx]
     
-    return optimal_thres
+    return optimal_thres, #plt.show()
 
-#print(ROC_Curve_Analytics(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train, train_test.Y_train))
+#print(ROC_Curve_Analytics(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+#, train_test.Y_train))
 
 # ========================================
 # Prediction Function @ maximal threshold
@@ -61,8 +59,8 @@ def Predict(function, X_test, Y_test, X_train, Y_train, threshold):
 
     return predict_binary
 
-#p = (Predict(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.5))
-#print(p)
+#p = (Predict(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train, train_test.Y_train\
+#, threshold=0.5))
 
 #======================
 #Confusion Matrix Plot
@@ -79,18 +77,14 @@ def Confusion_matrix_plot(function, X_test, Y_test, X_train, Y_train, threshold)
 
 a = (Confusion_matrix_plot(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
     , train_test.Y_train, threshold=0.5))
-#print(a)
 
 def Prediction(function, X_test, X_train, Y_train):
      
     res = function(X_train, Y_train)[1]
     predict_probability = res.predict(X_test)
-    #print(predict_probability)
-    #print(type(predict_probability))
     k = [round(i,10) for i in predict_probability.values.tolist()]
     predict_binary = k.copy()
 
     return predict_binary
 
 #print(Prediction(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.X_train, train_test.Y_train))
-#print(train_test.X_test.columns)
