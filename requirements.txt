@@ -1,6 +1,6 @@
 #altair
 #appdirs
-gunicorn
+gunicorn==19.0.0
 asgiref
 #attrs
 beautifulsoup4
