@@ -1,5 +1,3 @@
-#altair
-#appdirs
 gunicorn
 asgiref
 #attrs
