@@ -1,5 +1,6 @@
 #altair
 #appdirs
+gunicorn
 asgiref
 #attrs
 beautifulsoup4
