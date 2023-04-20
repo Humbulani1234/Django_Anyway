@@ -28,7 +28,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 SECRET_KEY = 'django-insecure--wm)im55ms7r$v%@sh2m11rk0ort$+%vf8p$5@kxmb)+ptjs2%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  True
+DEBUG =  False
 
 ALLOWED_HOSTS = ['djangoanyway-production.up.railway.app']
 
