@@ -56,11 +56,15 @@
 </div>   -->
 
 <div class="container"> 
- <style>
+ <!-- <style>
  img {display:block; margin-left:auto; margin-right:auto;}
 </style> 
-    <img src="{% static 'pngegg.png' %}" alt="No Picture" class="img-fuid img-responsive center"> 
+    <img src="{% staticfiles 'pngegg.png' %}" alt="No Picture" class="img-fuid img-responsive center">  -->
    <div class="content-section"> 
+    <style>
+ img {display:block; margin-left:auto; margin-right:auto;}
+</style> 
+    <img src="{% staticfiles 'pngegg.png' %}" alt="No Picture" class="img-fuid img-responsive center"> 
         <form method="POST" class="form-horizontal">
             {% csrf_token %}
             {% if form.non_field_errors %}
