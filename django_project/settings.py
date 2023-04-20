@@ -28,7 +28,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 SECRET_KEY = 'django-insecure--wm)im55ms7r$v%@sh2m11rk0ort$+%vf8p$5@kxmb)+ptjs2%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  False
+DEBUG = True
 
 ALLOWED_HOSTS = ['djangoanyway-production.up.railway.app', 'localhost']
 
@@ -130,9 +130,9 @@ STATIC_URL = 'static/'
 #STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_ROOT = BASE_DIR / 'static'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'staticfiles'
- ]
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'staticfiles'
+#  ]
 
 
 # Default primary key field type
