@@ -18,6 +18,11 @@ import Model_Perf
 import pandas as pd
 import numpy as np
 
+
+def home(request):
+
+    return render(request, 'home.html')
+
 def inputs(request):
 
     global AGE, TITLE, list_1, answer

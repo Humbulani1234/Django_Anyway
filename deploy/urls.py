@@ -6,6 +6,6 @@ from . import views
 urlpatterns = [
 
     path('',views.inputs, name='deployment'),
-    # path('answer/',views.result, name='results')
+    path('Home/',views.home, name='home')
 
 ]
