@@ -43,14 +43,18 @@
   </div>
 </nav>
 <legend class="border-bottom mb-4 container">Calculate Probability using Decision Tree</legend>
-<style>
+<<!-- style>
  img {display:block; margin-left:auto; margin-right:auto;}
 </style>
 <div class="container">
     <img src="{% static 'main.jpg' %}" alt="No Picture" style="width:900px;height:260px;" class="center">
-</div>
+</div> -->
 
 <div class="container"> 
+<style>
+ img {display:block; margin-left:auto; margin-right:auto;}
+</style> 
+    <img src="{% static 'main.jpg' %}" alt="No Picture" style="height:300px;width:600px" class="img-fuid img-responsive center">
    <div class="content-section"> 
         <form method="POST" class="form-horizontal">
             {% csrf_token %}
