@@ -17,6 +17,22 @@ import numpy as np
 import Decision_tree
 
 
+
+def confusion_decision(request):
+
+     return render (request, 'confusion_decision.html')
+
+
+def decision_tree(request):
+
+     return render (request, 'decision_tree.html')
+
+
+def cross_validate(request):
+
+     return render (request, 'cross_validate.html')
+
+
 def tree(request):
 
     global AGE, TITLE, list_1, answer

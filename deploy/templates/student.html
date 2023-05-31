@@ -1,0 +1,95 @@
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %} 
+{% load bootstrap5 %}
+{% load static %}
+
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewpoint" content="width=device-width, initial-scale=0.1">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> 
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		<link rel="shortcut icon" href="#">
+		  
+
+		<title></title>
+
+	</head>
+
+	<body>
+
+			<style>
+				
+				.contained {
+			              display: flex;
+			              justify-content: center;
+			              align-items: center;
+			                }
+			</style>
+
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color:lightblue">
+        <a class="navbar-brand" href="#"><button onclick="history.back()" style="background-color:green; font-size:12px;">Go Back</button></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+        </button> 
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+          <!-- <ul class="navbar-nav nav navbar-nav navbar-logo mx-auto"> -->
+
+            <ul class="navbar-nav nav navbar-nav navbar-logo mr-auto">
+
+              <!-- <span><li class="nav-item dropdown">
+
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Performance</a>
+
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="http://localhost:8000/Logistic/Roc">ROC curve</a>
+                    <a class="dropdown-item" href="{% static 'confusion_matrix_logistic.png' %}">Confusion Matrix</a>
+                  </div>
+
+               </li></span> -->
+
+               <!-- <span><li class="nav-item dropdown">
+
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Diagnostics</a>
+
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% static 'residuals.png' %}">Residuals</a>
+                      <a class="dropdown-item" href="{% static 'student.png' %}">Student Residuals</a>
+                      <a class="dropdown-item" href="{% static 'normal_plot.png' %}">Normal plot</a>
+                      <a class="dropdown-item" href="{% static 'cooks.png' %}">Cooks Distance</a>
+                      <a class="dropdown-item" href="{% static 'partial.png' %}">Partial Plot</a> 
+                  </div>
+
+              </li></span> -->
+
+           </ul>
+
+           <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+           </form>
+
+        </div>
+
+      </nav>
+
+		  <div class="text-center">
+	       <img class="rounded" src="{% static 'student.png' %}" alt="No Picture" style="max-width: 100%;height:auto;">
+	    </div>
+
+	    <legend class="border-bottom mb-4 container"></legend>
+
+
+	</body>
+
+</html>

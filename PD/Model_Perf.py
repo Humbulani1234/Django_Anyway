@@ -19,22 +19,57 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+# f = plt.figure(figsize=(3,3))
+
 def ROC_Curve_Analytics(function, X_test, Y_test, X_train, Y_train):
     
+    # res = (function(X_train, Y_train))[1]
+    # predict_probability = res.predict(X_test)
+
+    # fpr,tpr,thresholds = metrics.roc_curve(Y_test, predict_probability)
+
+    # f, ax = plt.subplots(figsize=(3,3))
+    # #fig = plt.figure()
+    # # plt.plot(fpr,tpr)
+    # #ax = f.add_subplot(1,1,1)
+    # out = ax.plot(fpr,tpr)
+
+    # optimal_idx = np.argmax(tpr-fpr)
+    # optimal_thres = thresholds[optimal_idx]
+    
+    # return out, #optimal_thres 
+
     res = (function(X_train, Y_train))[1]
     predict_probability = res.predict(X_test)
 
     fpr,tpr,thresholds = metrics.roc_curve(Y_test, predict_probability)
+    
+    #Roc plot
 
     plt.plot(fpr,tpr)
+
+    plt.title("ROC Curve", fontsize=12, pad=15)
+    plt.xlabel("fpr",fontsize=14)
+    plt.xticks(fontsize=14)
+    plt.ylabel('tpr', fontsize = 14)
+    plt.yticks(fontsize=14)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
+
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)
+    #plt.show()
 
     optimal_idx = np.argmax(tpr-fpr)
     optimal_thres = thresholds[optimal_idx]
     
     return optimal_thres, #plt.show()
 
-#print(ROC_Curve_Analytics(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-#, train_test.Y_train))
+
+# y = ROC_Curve_Analytics(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+#  , train_test.Y_train)
+
+# plt.show()
 
 # ========================================
 # Prediction Function @ maximal threshold
@@ -72,11 +107,24 @@ def Confusion_matrix_plot(function, X_test, Y_test, X_train, Y_train, threshold)
     
     z = confusion_matrix(Y_test, predict_binary, labels = [0, 1])
     z_1 = ConfusionMatrixDisplay(z, display_labels = ["No Default", "Yes Default"])
-    
-    return z
+    #z_1.plot()
+    #
+    plt.title("Confusion Matrix", fontsize=15, pad=18)
+    plt.xlabel("Predicted Label",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('True Label', fontsize = 14)
+    plt.yticks(fontsize=12)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
 
-a = (Confusion_matrix_plot(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-    , train_test.Y_train, threshold=0.5))
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)
+
+    return #plt.show()
+
+# a = (Confusion_matrix_plot(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+#      , train_test.Y_train, threshold=0.5))
+
 
 def Prediction(function, X_test, X_train, Y_train):
      

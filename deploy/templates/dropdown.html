@@ -1,0 +1,77 @@
+<div class="sidebar">
+    <ul class="menu">
+        <li>
+            <a href="#" onclick="toggleDropdown('dropdown1')">Dropdown 1</a>
+            <ul id="dropdown1" class="dropdown">
+                <li><a href="#">Item 1</a></li>
+                <li><a href="#">Item 2</a></li>
+                <li><a href="#">Item 3</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" onclick="toggleDropdown('dropdown2')">Dropdown 2</a>
+            <ul id="dropdown2" class="dropdown">
+                <li><a href="#">Item 4</a></li>
+                <li><a href="#">Item 5</a></li>
+                <li><a href="#">Item 6</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+function toggleDropdown(id) {
+    var dropdown = document.getElementById(id);
+    dropdown.classList.toggle('active');
+}
+
+the python code of forms here and request
+
+def get_results(request, item_id):
+    # get results based on item_id
+    results = Result.objects.filter(item_id=item_id)
+    # render results in template
+    return render(request, 'results.html', {'results': results})
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # add previous URL patterns here
+    path('get_results/<int:item_id>/', views.get_results, name='get_results'),
+]
+
+!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+    <ul>
+    {% for result in results %}
+        <li>{{ result }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
+
+<div class="sidebar">
+    <ul class="menu">
+        <li>
+            <a href="#" onclick="toggleDropdown('dropdown1')">Dropdown 1</a>
+            <ul id="dropdown1" class="dropdown">
+                <li><a href="{% url 'get_results' 1 %}">Item 1</a></li>
+                <li><a href="{% url 'get_results' 2 %}">Item 2</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ from django.contrib import messages
 import sys
 import os
 from pathlib import Path
+from django.template import loader
 
 sys.path.append('/home/humbulani/New/django_project/PD')
 
@@ -17,6 +18,69 @@ from django.templatetags.static import static
 import Model_Perf
 import pandas as pd
 import numpy as np
+import train_test
+import GLM_Bino
+import matplotlib.pyplot as plt
+import Diagnostics
+import io
+
+# Performance measures
+
+def roc(request):
+
+    # #g, ax = plt.subplots(figsize=(3,4))
+
+    # f = Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+    #                                       ,train_test.Y_train)
+                                         
+    # # f = Model_Perf.ROC_Curve_Analytics(ax,GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+    # #                                        ,train_test.Y_train)[1][0]                              
+
+    return render (request, 'roc.html')
+
+def confusion_logistic(request):
+
+     return render (request, 'confusion_logistic.html')
+
+# Model Diagnostics
+
+
+def normal_plot(request):
+
+    f = Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+                                          ,train_test.Y_train,threshold=0.47)
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    plt.close()
+
+    response = HttpResponse(buffer.read(), content_type='image/png')
+    response['Content-Disposition'] = 'attachment; filename="normal_plot.png"'
+
+    #return response
+
+    return render (request, 'normal_plot.html', {'response': response} )
+
+def residuals(request):
+
+     return render (request, 'residuals.html')
+
+def partial(request):
+
+     return render (request, 'partial.html')
+
+def student(request):
+
+     return render (request, 'student.html')
+
+def cooks(request):
+
+     return render (request, 'cooks.html')
+
+
+
+
 
 
 def home(request):
@@ -214,6 +278,7 @@ def inputs(request):
             #return redirect('deployment') 
 
     else:
+
         form = Inputs()
         side_bar = Side()
 

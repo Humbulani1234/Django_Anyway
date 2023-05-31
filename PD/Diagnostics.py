@@ -71,8 +71,22 @@ def Plot_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
     
     Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
     Quantile_Residuals_Series.plot()
+
+    plt.title("Cross Validate", fontsize=15, pad=18)
+    plt.xlabel("Alpha",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Mean Accuracy', fontsize = 14)
+    plt.yticks(fontsize=12)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
+
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)  
     
     return plt.show()
+
+# d = Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+#              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
 
 # =====================================================
 # Breush Pagan Test for Hetereskedasticity of variance
@@ -94,11 +108,26 @@ def Normal_Residual_Test(function, X_test, Y_test, X_train, Y_train, threshold):
     Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
 
     sm.qqplot(Quantile_Residuals_Series, line='45',scale=1)
+
+    plt.title("Cross Validate", fontsize=15, pad=18)
+    plt.xlabel("Alpha",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Mean Accuracy', fontsize = 14)
+    plt.yticks(fontsize=12)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
+
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)  
+
     #pylab.show()
 
     normal_test = scipy.stats.normaltest(Quantile_Residuals_Series)
     
     return normal_test, pylab.show()
+
+# d = Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+#              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
 
 # ===========================================================
 # Durbin Watson Test for Residuals correlation range(1,5 - 2)
@@ -120,8 +149,22 @@ def Partial_Plots(function, independent, X_test, Y_test, X_train, Y_train, thres
     
     Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
     plt.scatter(independent, Quantile_Residuals_Series)
+
+    plt.title("Cross Validate", fontsize=15, pad=18)
+    plt.xlabel("Alpha",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Mean Accuracy', fontsize = 14)
+    plt.yticks(fontsize=12)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
+
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)  
     
     return plt.show()
+
+# d = Partial_Plots(GLM_Bino.GLM_Binomial_fit,train_test.X_test["CHILDREN"], train_test.X_test\
+#              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
 
 # =======================
 # Outliers and Influence
@@ -142,11 +185,22 @@ def Leverage_Studentized_Quantile_Res(function, X_test, Y_test, X_train, Y_train
         lev_stud_res.append(Quantile_Residuals_Series[i]/(sqrt(1-hat_matrix[i])))
 
     pd.Series(lev_stud_res).plot()
+
+    plt.title("Cross Validate", fontsize=15, pad=18)
+    plt.xlabel("Alpha",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Mean Accuracy', fontsize = 14)
+    plt.yticks(fontsize=12)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
+
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)  
     
     return plt.show()
 
 # f = Leverage_Studentized_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-#             ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+#               ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
 
 
 # ================
@@ -166,5 +220,19 @@ def Cooks_Distance_Quantile_Res(function, X_test, Y_test, X_train, Y_train, thre
         D.append((Quantile_Residuals_Series[i]**2/3000)*(hat_matrix[i]/(1-hat_matrix[i])))
 
     pd.Series(D).plot()
+
+    plt.title("Cross Validate", fontsize=15, pad=18)
+    plt.xlabel("Alpha",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.ylabel('Mean Accuracy', fontsize = 14)
+    plt.yticks(fontsize=12)
+    plt.rcParams["figure.figsize"] = (2.7,2.5)
+    plt.rcParams["legend.title_fontsize"] = 7
+
+    for pos in ["right", "top"]:
+        plt.gca().spines[pos].set_visible(False)  
     
     return plt.show()
+
+# f = Cooks_Distance_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+#               ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)

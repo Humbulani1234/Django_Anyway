@@ -28,7 +28,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 SECRET_KEY = 'django-insecure--wm)im55ms7r$v%@sh2m11rk0ort$+%vf8p$5@kxmb)+ptjs2%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -80,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
+ASGI_APPLICATION = 'djando_project.asgi.application'
 
 
 # Database
@@ -139,3 +140,4 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CSRF_TRUSTED_ORIGINS = ['https://djangoanyway-production-d043.up.railway.app']
