@@ -5,6 +5,18 @@
              "use": "@vercel/python"}],
 
 "routes": [{"src": "/(.*)",
-            "dest": "django_project/wsgi.py"}]          
+            "dest": "django_project/wsgi.py"}] 
+
+  
+  "functions": {
+    "api/test.js": {
+      "memory": 3008,
+      "maxDuration": 30
+    },
+    "api/*.js": {
+      "memory": 3008,
+      "maxDuration": 30
+    }
+  }
 
 }
