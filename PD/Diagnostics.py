@@ -249,4 +249,4 @@ def Cooks_Distance_Quantile_Res(function, X_test, Y_test, X_train, Y_train, thre
 
 # f = Cooks_Distance_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
 #               ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-.
+

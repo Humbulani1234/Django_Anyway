@@ -31,7 +31,7 @@ def DT_Classification_fit(X_train, Y_train, randomstate, ccpalpha):
     
     return clf_dt
 
-DT_classification = DT_Classification_fit(train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=0)
+#DT_classification = DT_Classification_fit(train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=0)
 
 # ====================
 # Base tree prediction
@@ -61,23 +61,12 @@ def Confusion_matrix_plot_DT(func, X_train, Y_train, X_test, Y_test, randomstate
     
     z = confusion_matrix(Y_test, predict_DT_Series)
     z_1 = ConfusionMatrixDisplay(z, display_labels = ["No Default", "Yes Default"])
-    #z_1.plot()
+    z_1.plot()
     
-    plt.title("Confusion Matrix", fontsize=15, pad=18)
-    plt.xlabel("Predicted Label",fontsize=14)
-    plt.xticks(fontsize=12)
-    plt.ylabel('True Label', fontsize = 14)
-    plt.yticks(fontsize=12)
-    plt.rcParams["figure.figsize"] = (2.7,2.5)
-    plt.rcParams["legend.title_fontsize"] = 7
-
-    for pos in ["right", "top"]:
-        plt.gca().spines[pos].set_visible(False)
-    
-    return #plt.show()  
+    return z_1.plot() 
 
 # Confusion = Confusion_matrix_plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, train_test1.X_test\
-#       , train_test1.Y_test, randomstate=42, ccpalpha=0)
+#     , train_test1.Y_test, randomstate=42, ccpalpha=0)
 
 # ==============
 # Base tree plot
@@ -89,21 +78,8 @@ def Plot_DT(func, X_train, Y_train, randomstate, ccpalpha):
     
     plt.figure(figsize = (12, 8))
     
-    plot_tree(clf_dt, filled=True, rounded=True, class_names=["No Default", "Yes Default"]\
-                                       , feature_names = X_train.columns)
-
-    plt.title("Decision Tree", fontsize=15, pad=18)
-    plt.xlabel(" ",fontsize=14)
-    plt.xticks(fontsize=12)
-    plt.ylabel(' ', fontsize = 14)
-    plt.yticks(fontsize=12)
-    plt.rcParams["figure.figsize"] = (2.7,2.5)
-    plt.rcParams["legend.title_fontsize"] = 7
-
-    for pos in ["right", "top"]:
-        plt.gca().spines[pos].set_visible(False)  
-
-    return #plt.show() 
+    # return plot_tree(clf_dt, filled=True, rounded=True, class_names=["No Default", "Yes Default"]\
+    #                                    , feature_names = X_train.columns)   
 
 #print(Plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=0))
 
@@ -145,21 +121,10 @@ def Cross_Validate_Alphas(func, X_train, Y_train, randomstate, ccpalpha):
     alpha_results = pd.DataFrame(alpha_loop_values, columns=["alpha", "mean_accuracy", "std"])
     alpha_results.plot(x="alpha", y="mean_accuracy", yerr="std", marker="o"\
                                               , linestyle="--")
-
-    plt.title("Cross Validate", fontsize=15, pad=18)
-    plt.xlabel("Alpha",fontsize=14)
-    plt.xticks(fontsize=12)
-    plt.ylabel('Mean Accuracy', fontsize = 14)
-    plt.yticks(fontsize=12)
-    plt.rcParams["figure.figsize"] = (2.7,2.5)
-    plt.rcParams["legend.title_fontsize"] = 7
-
-    for pos in ["right", "top"]:
-        plt.gca().spines[pos].set_visible(False)  
     
     return alpha_results, #plt.show()
 
-# f = Cross_Validate_Alphas(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=0)
+#print(Cross_Validate_Alphas(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=0))
 
 # ==========================
 # Extraction of ideal alpha
@@ -173,7 +138,7 @@ def Ideal_Alpha(func, X_train, Y_train, threshold_1, threshold_2, randomstate, c
      & (alpha_results["alpha"] < threshold_2)]["alpha"]
 
     ideal_ccp_alpha = ideal_ccp_alpha.values.tolist()
-    #print(ideal_ccp_alpha)
+    print(ideal_ccp_alpha)
     
     return ideal_ccp_alpha[0]
 
@@ -219,4 +184,4 @@ Confusion_matrix_plot = Confusion_matrix_plot_DT(DT_Classification_fit, train_te
 # Plot final tree
 # =================
 
-Plot_tree = Plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=ideal_ccp_alpha)
+#Plot_tree = Plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=ideal_ccp_alpha)
