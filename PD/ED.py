@@ -5,6 +5,7 @@ import sys
 import os
 
 sys.path.append('/home/humbulani/New/django_project/')
+#print(sys.path)
 
 pd.set_option("display.width", 30000)
 pd.set_option("display.max_columns", 30000)
@@ -12,7 +13,7 @@ pd.set_option("display.max_rows", 30000)
 pd.set_option("display.float_format", lambda x: "%.0f" %x)
 warnings.filterwarnings("ignore")
 
-path = './../static/KGB.sas7bdat'
+path = 'static/KGB.sas7bdat'
 
 def Data_download(file_path):
     
