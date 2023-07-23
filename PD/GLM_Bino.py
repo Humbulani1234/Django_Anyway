@@ -18,7 +18,8 @@ def GLM_Binomial_fit(X_train, Y_train):
     
     return res.summary(), res
 
-#m = (GLM_Binomial_fit(train_test.X_train, train_test.Y_train))[1]
+#m = (GLM_Binomial_fit(train_test.X_train, train_test.Y_train))[0]
+#print(m)
 
 #print(m.predict(train_test.X_test))
 #print(dir(m))

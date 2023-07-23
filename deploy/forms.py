@@ -5,7 +5,7 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 class Inputs(forms.Form):
 
     # Float categories
-    # 
+ 
 	NAME = forms.CharField()
 	AGE = forms.FloatField()
 	CHILDREN = forms.FloatField()

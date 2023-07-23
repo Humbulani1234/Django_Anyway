@@ -66,10 +66,10 @@ def ROC_Curve_Analytics(function, X_test, Y_test, X_train, Y_train):
     return optimal_thres, #plt.show()
 
 
-# y = ROC_Curve_Analytics(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-#  , train_test.Y_train)
+#y = ROC_Curve_Analytics(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+#, train_test.Y_train)
 
-# plt.show()
+#plt.show()
 
 # ========================================
 # Prediction Function @ maximal threshold
@@ -130,8 +130,11 @@ def Prediction(function, X_test, X_train, Y_train):
      
     res = function(X_train, Y_train)[1]
     predict_probability = res.predict(X_test)
+    #print(predict_probability)
     k = [round(i,10) for i in predict_probability.values.tolist()]
+    #print(k)
     predict_binary = k.copy()
+    #print(predict_binary)
 
     return predict_binary
 

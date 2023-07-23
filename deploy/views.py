@@ -47,20 +47,20 @@ def confusion_logistic(request):
 
 def normal_plot(request):
 
-    f = Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-                                          ,train_test.Y_train,threshold=0.47)
-    buffer = io.BytesIO()
-    fig.savefig(buffer, format='png')
-    buffer.seek(0)
+    # f = Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
+    #                                       ,train_test.Y_train,threshold=0.47)
+    # buffer = io.BytesIO()
+    # fig.savefig(buffer, format='png')
+    # buffer.seek(0)
 
-    plt.close()
+    # plt.close()
 
-    response = HttpResponse(buffer.read(), content_type='image/png')
-    response['Content-Disposition'] = 'attachment; filename="normal_plot.png"'
+    # response = HttpResponse(buffer.read(), content_type='image/png')
+    # response['Content-Disposition'] = 'attachment; filename="normal_plot.png"'
 
     #return response
 
-    return render (request, 'normal_plot.html', {'response': response} )
+    return render (request, 'normal_plot.html')
 
 def residuals(request):
 
@@ -77,9 +77,6 @@ def student(request):
 def cooks(request):
 
      return render (request, 'cooks.html')
-
-
-
 
 
 

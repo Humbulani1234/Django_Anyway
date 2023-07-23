@@ -12,7 +12,7 @@ pd.set_option("display.max_rows", 30000)
 pd.set_option("display.float_format", lambda x: "%.0f" %x)
 warnings.filterwarnings("ignore")
 
-path = 'static/KGB.sas7bdat'
+path = './KGB.sas7bdat'
 
 def Data_download(file_path):
     

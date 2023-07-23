@@ -14,12 +14,13 @@
 import ED
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
-import missing_adhoc
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import PercentFormatter
 from sklearn.model_selection import train_test_split
 import warnings
+
+# --------------------------------------------------------------------Settings--------------------------------------------------------------
 
 pd.set_option("display.width", 1100)
 pd.set_option("display.max_columns", 1000)

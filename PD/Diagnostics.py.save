@@ -56,16 +56,16 @@ def Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
 
     Quantile_Residuals = []
     
-    #res = function(X_train, Y_train)[1]
+    res = function(X_train, Y_train)[1]
     predict_probability = Model_Perf.Prediction(function, X_test, X_train, Y_train)
     for i in range(Y_test.shape[0]):
 
         if predict_probability[i] < threshold: 
-            u1 = np.round(np.random.uniform(low=0,high=predict_probability[i]),10)
+            u1 = np.random.uniform(low=0,high=predict_probability[i])
             Quantile_Residuals.append(norm.ppf(u1))
         
         else:
-            u2 = np.round(np.random.uniform(low=predict_probability[i],high=1),10)
+            u2 = np.random.uniform(low=predict_probability[i],high=1)
             Quantile_Residuals.append(norm.ppf(u2))
     
     Quantile_Residuals_Series = pd.Series(Quantile_Residuals)
@@ -73,8 +73,8 @@ def Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
     return Quantile_Residuals_Series
 
 # d = Quantile_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-#              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.8)
-# print(d)
+#             ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+
 
 # ===============
 # Residuals plot
@@ -98,7 +98,7 @@ def Plot_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
     
     return plt.show()
 
-#d = Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+# d = Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
 #              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
 
 # =====================================================
@@ -249,4 +249,4 @@ def Cooks_Distance_Quantile_Res(function, X_test, Y_test, X_train, Y_train, thre
 
 # f = Cooks_Distance_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
 #               ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-.
+
