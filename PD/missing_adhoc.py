@@ -11,7 +11,7 @@ import ED
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.impute import SimpleImputer
-from scipy.stats import chi2_contingency
+import statsmodels as sm
 from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 import logging
@@ -109,15 +109,18 @@ def Categorical_missingness_Pivot_Plot(independent, target):
 # Tests
 # ======
 
-def Chi_Square_Missingness_Categorical_Test(independent, target):
+# def Chi_Square_Missingness_Categorical_Test(independent, target):
     
-    '''Missing variables Test - Adhoc'''
+#     '''Missing variables Test - Adhoc'''
     
-    missingness = independent.isnull()
-    h_chi = pd.crosstab(missingness, target)
-    chi_val, p_val, dof, expected = chi2_contingency(h_chi)
+#     missingness = independent.isnull()
+#     h_chi = pd.crosstab(missingness, target)
+#     chi_val, p_val, dof, expected = sm.stats.chisquare(h_chi)
     
-    return chi_val, p_val
+#     return chi_val, p_val
+
+# ans = Chi_Square_Missingness_Categorical_Test(ED.df_loan_categorical["RESID"], ED.df_loan_float["GB"])
+# print(ans)
 
 # ===============================================================================================================================
 

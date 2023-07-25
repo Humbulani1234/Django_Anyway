@@ -3,7 +3,7 @@
 
 import statsmodels.api as sm
 import train_test
-import scipy.stats
+#import scipy.stats
 import pickle
 
 # GLM FIT-BINOMIAL

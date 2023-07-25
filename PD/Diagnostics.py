@@ -21,7 +21,7 @@
 # Diagnostics tests
 # =================
  
-from scipy.stats import norm
+#from scipy.stats import norm
 import GLM_Bino
 import ED
 import train_test
@@ -45,9 +45,9 @@ import statsmodels.api as sm
 # @package scipy
 #
 
-import scipy
+#import scipy
 
-from scipy import stats
+#from scipy import stats
 from math import *
 
 # Quantile residuals @ 0.47 cut-off
@@ -122,7 +122,7 @@ def Normal_Residual_Test(function, X_test, Y_test, X_train, Y_train, threshold):
 
     sm.qqplot(Quantile_Residuals_Series, line='45',scale=1)
 
-    plt.title("Cross Validate", fontsize=15, pad=18)
+    plt.title("Normal Test", fontsize=15, pad=18)
     plt.xlabel("Alpha",fontsize=14)
     plt.xticks(fontsize=12)
     plt.ylabel('Mean Accuracy', fontsize = 14)
@@ -135,10 +135,8 @@ def Normal_Residual_Test(function, X_test, Y_test, X_train, Y_train, threshold):
 
     #pylab.show()
 
-    normal_test = scipy.stats.normaltest(Quantile_Residuals_Series)
+    normal_test = sm.stats.normaltest(Quantile_Residuals_Series)
     
-    return normal_test, pylab.show()
-
 # d = Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
 #              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
 

@@ -13,6 +13,5 @@ numpy
 pandas
 patsy 
 scikit-learn
-scipy
 statsmodels
 threadpoolctl 
