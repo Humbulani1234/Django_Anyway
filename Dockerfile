@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8000
 
 # Command to start the server
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "django_project.wsgi"]
+CMD ["gunicorn", "--workers=3","django_project.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "400"]
