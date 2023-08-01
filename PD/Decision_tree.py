@@ -63,7 +63,7 @@ def Confusion_matrix_plot_DT(func, X_train, Y_train, X_test, Y_test, randomstate
     z_1 = ConfusionMatrixDisplay(z, display_labels = ["No Default", "Yes Default"])
     z_1.plot()
     
-    return z_1.plot() 
+    #return z_1.plot() 
 
 # Confusion = Confusion_matrix_plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, train_test1.X_test\
 #     , train_test1.Y_test, randomstate=42, ccpalpha=0)
@@ -76,7 +76,7 @@ def Plot_DT(func, X_train, Y_train, randomstate, ccpalpha):
     
     clf_dt = func(X_train, Y_train, randomstate, ccpalpha)
     
-    plt.figure(figsize = (12, 8))
+    #plt.figure(figsize = (12, 8))
     
     # return plot_tree(clf_dt, filled=True, rounded=True, class_names=["No Default", "Yes Default"]\
     #                                    , feature_names = X_train.columns)   
@@ -138,7 +138,7 @@ def Ideal_Alpha(func, X_train, Y_train, threshold_1, threshold_2, randomstate, c
      & (alpha_results["alpha"] < threshold_2)]["alpha"]
 
     ideal_ccp_alpha = ideal_ccp_alpha.values.tolist()
-    print(ideal_ccp_alpha)
+    #print(ideal_ccp_alpha)
     
     return ideal_ccp_alpha[0]
 
@@ -153,14 +153,14 @@ def Ideal_Alpha(func, X_train, Y_train, threshold_1, threshold_2, randomstate, c
 # Ideal alpha value for pruning the tree
 # ======================================
 
-ideal_ccp_alpha = Ideal_Alpha(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, threshold_1=0.0019\
-    , threshold_2=0.0021, randomstate=42, ccpalpha=0)
+# ideal_ccp_alpha = Ideal_Alpha(DT_Classification_fit, train_test1.X_train, train_test1.Y_train, threshold_1=0.0019\
+#     , threshold_2=0.0021, randomstate=42, ccpalpha=0)
 
 # ====================
 # Pruned tree fitting
 # ====================
 
-clf_dt_pruned = DT_Classification_fit(train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=ideal_ccp_alpha)
+# clf_dt_pruned = DT_Classification_fit(train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=ideal_ccp_alpha)
 
 # ===================================
 # Prediction and perfomance analytics
@@ -170,15 +170,15 @@ clf_dt_pruned = DT_Classification_fit(train_test1.X_train, train_test1.Y_train, 
 # Predict
 # ========
 
-predict_DT_Series = Predict_binary_DT(DT_Classification_fit, train_test1.X_train.iloc[0].values.reshape(1,-1), train_test1.Y_train, train_test1.X_test\
-     , train_test1.Y_test, randomstate=42, ccpalpha=ideal_ccp_alpha)
+# predict_DT_Series = Predict_binary_DT(DT_Classification_fit, train_test1.X_train.iloc[0].values.reshape(1,-1), train_test1.Y_train, train_test1.X_test\
+#      , train_test1.Y_test, randomstate=42, ccpalpha=ideal_ccp_alpha)
 
 # # ======================
 # # Confusion matrix plot
 # ======================
 
-Confusion_matrix_plot = Confusion_matrix_plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train\
-     , train_test1.X_test, train_test1.Y_test, randomstate=42, ccpalpha=ideal_ccp_alpha)
+# Confusion_matrix_plot = Confusion_matrix_plot_DT(DT_Classification_fit, train_test1.X_train, train_test1.Y_train\
+#      , train_test1.X_test, train_test1.Y_test, randomstate=42, ccpalpha=ideal_ccp_alpha)
 
 # =================
 # Plot final tree

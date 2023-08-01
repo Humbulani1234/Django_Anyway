@@ -45,31 +45,92 @@
 		        }
 
 		 .containerd {
+
 			display: flex;
-			justify-content: center;
-		    align-items: center;
-		    height: 100vh;
+			justify-content: space-between;
+/*		    align-items: center;*/
+/*		    height: 100vh;*/
+/*		    width: 80vh;*/
+		    padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+/*            max-height: 20%;*/
+/*            max-width: 60%;*/
 	                 }
 
 		  .box {
-		    flex: 1;
+
+		    flex-grow: 1;
 		    display: inline-block;
 		    justify-content: center;
-	         align-items: center;
+	        align-items: center;
+	        margin-right: 500px;
+	        padding: 10px;
+/*	        width: 45%;*/
+
 		       }
 
 		  .box1 {
-			   height: 50vh;
-			   background-color: red;
+
+			    flex-grow: 1;
+			    display: inline-block;
+			    justify-content: center;
+		        align-items: center;
+                margin-left: 500px;
+                padding: 10px;
+/*                width: 45%;*/
 		        }
 
 		  .mybtn {
+
 			   background-color: whitesmoke;
 			   text-align: center;
 			   display: inline-block;
 			   font-size: 15px;
 			   cursor: pointer;
+
 			      }
+		   .text-box {
+
+/*		   	          text-align: center;*/
+		   	          display: flex;
+                      height: 100%;
+                      justify-content: center;
+	                  align-items: center;
+/*	                  width: 100%;*/
+/*                      height: 100vh;*/
+
+		             }
+
+		     /*@media (max-width: 767px) {
+
+                                                .containerd {
+                                                           flex-direction: row;
+/*                                                           max-width: 100%;*/
+
+                                                            }
+                                                /*.box,
+                                                .box1 {margin: 20px 0;}*/
+
+									/*		   	          text-align: center;*/
+											   	          /*display: flex;
+									                      height: 100%;
+									                      justify-content: center;
+										                  align-items: center;
+										                  width: 100%;
+
+											             }*/
+									                                                      
+                                                     
+/*                                               }*/
+*/
+
+		    footer {
+
+                    background-color: #fff;
+                    height: 50px;
+		           }
 
 	</style>
              
@@ -82,19 +143,7 @@
 
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-		    <ul class="navbar-nav nav navbar-nav navbar-logo mr-auto">
-		      <!-- <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="#">Action</a>
-		          <a class="dropdown-item" href="#">Another action</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="#">Something else here</a>
-		        </div>
-
-		      </li> -->
-		    </ul>
+		    <ul class="navbar-nav nav navbar-nav navbar-logo mr-auto"></ul>
 
 		    <form class="form-inline my-2 my-lg-0">
 		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -105,9 +154,11 @@
 
 		</nav> 
 
+		<div class="text-box">
+
 		<div class="containerd">
 
-			<div class="box">
+	  		<div class="box">
 
 				    <div style="color:blue;">
 						<h3 class="center-link">Choose a Model</h3>
@@ -118,9 +169,9 @@
 					<span class="center-link"><a href="https://pd-django.onrender.com/Decision" target="_self" title="Visit Decision"><button class="mybtn">Enter Decision Tree</button></a></span>
 					<legend></legend>
 					<span class="center-link"><a href="https://humbulani1234-streamlit-deployed-r26v5u.streamlit.app/" target="_self" title="Visit Streamlit"><button class="mybtn">Streamlit</button></a></span>
-			</div>
+		    </div>
 
-			<div class="box">
+			<div class="box1">
 
 					<div style="color:blue;">
 						<h4 class="center-link">GitHub Repos</h4>
@@ -134,8 +185,11 @@
 
 			</div>
 
-	    </div>
-
+	</div>
+    </div>
 	</body>
+	<footer>
+
+	</footer>
 	
 </html>

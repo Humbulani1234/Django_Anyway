@@ -40,6 +40,12 @@ import pylab
 import statsmodels.stats.diagnostic as sd
 from statsmodels.stats.stattools import durbin_watson
 import statsmodels.api as sm
+from scipy.stats import norm
+
+
+import io
+import base64
+
 
 ##
 # @package scipy
@@ -52,12 +58,12 @@ from math import *
 
 # Quantile residuals @ 0.47 cut-off
 
-def Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
+def Quantile_Residuals(function, Y_train, X_train, X_test, Y_test, threshold):
 
     Quantile_Residuals = []
     
     #res = function(X_train, Y_train)[1]
-    predict_probability = Model_Perf.Prediction(function, X_test, X_train, Y_train)
+    predict_probability = Model_Perf.Prediction(function, Y_train, X_train, X_test)
     for i in range(Y_test.shape[0]):
 
         if predict_probability[i] < threshold: 
@@ -72,34 +78,37 @@ def Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
     
     return Quantile_Residuals_Series
 
-# d = Quantile_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-#              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.8)
+# d = Quantile_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.Y_train.values.reshape(-1,1)\
+#               ,train_test.X_train, train_test.X_test, train_test.Y_test, threshold=0.8)
 # print(d)
 
 # ===============
 # Residuals plot
 # ===============
 
-def Plot_Residuals(function, X_test, Y_test, X_train, Y_train, threshold):
+def Plot_Residuals(function, Y_train, X_train, X_test, Y_test, threshold):
+
+    fig, ax = plt.subplots(1,1)
     
-    Quantile_Residuals_Series = Quantile_Residuals(function, X_test, Y_test, X_train, Y_train, threshold)
-    Quantile_Residuals_Series.plot()
+    Quantile_Residuals_Series = Quantile_Residuals(function, Y_train, X_train, X_test, Y_test, threshold)
 
-    plt.title("Cross Validate", fontsize=15, pad=18)
-    plt.xlabel("Alpha",fontsize=14)
-    plt.xticks(fontsize=12)
-    plt.ylabel('Mean Accuracy', fontsize = 14)
-    plt.yticks(fontsize=12)
-    plt.rcParams["figure.figsize"] = (2.7,2.5)
-    plt.rcParams["legend.title_fontsize"] = 7
+    ax.plot(Quantile_Residuals_Series.index, Quantile_Residuals_Series.values)
+    ax.set_title("Cross Validate", fontsize=15, pad=18)
+    ax.set_xlabel("Alpha",fontsize=14)
+    # plt.xticks(fontsize=12)
+    # plt.ylabel('Mean Accuracy', fontsize = 14)
+    # plt.yticks(fontsize=12)
+    # plt.rcParams["figure.figsize"] = (2.7,2.5)
+    # plt.rcParams["legend.title_fontsize"] = 7
 
-    for pos in ["right", "top"]:
-        plt.gca().spines[pos].set_visible(False)  
+    # for pos in ["right", "top"]:
+    #     plt.gca().spines[pos].set_visible(False)
     
-    return plt.show()
+    return fig
 
-#d = Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-#              ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+# d = Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.Y_train.values.reshape(-1,1)\
+#               ,train_test.X_train, train_test.X_test, train_test.Y_test, threshold=0.8)
+# plt.show()
 
 # =====================================================
 # Breush Pagan Test for Hetereskedasticity of variance

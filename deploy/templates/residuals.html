@@ -47,31 +47,6 @@
 
             <ul class="navbar-nav nav navbar-nav navbar-logo mr-auto">
 
-              <!-- <span><li class="nav-item dropdown">
-
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Performance</a>
-
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="http://localhost:8000/Logistic/Roc">ROC curve</a>
-                    <a class="dropdown-item" href="{% static 'confusion_matrix_logistic.png' %}">Confusion Matrix</a>
-                  </div>
-
-               </li></span> -->
-
-               <!-- <span><li class="nav-item dropdown">
-
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Diagnostics</a>
-
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{% static 'residuals.png' %}">Residuals</a>
-                      <a class="dropdown-item" href="{% static 'student.png' %}">Student Residuals</a>
-                      <a class="dropdown-item" href="{% static 'normal_plot.png' %}">Normal plot</a>
-                      <a class="dropdown-item" href="{% static 'cooks.png' %}">Cooks Distance</a>
-                      <a class="dropdown-item" href="{% static 'partial.png' %}">Partial Plot</a> 
-                  </div>
-
-              </li></span> -->
-
            </ul>
 
            <form class="form-inline my-2 my-lg-0">
@@ -85,6 +60,7 @@
 
 		  <div class="text-center">
 	       <img class="rounded" src="{% static 'residuals.png' %}" alt="No Picture" style="max-width: 100%;height:auto;">
+	       <!-- <img class="rounded" src="data:image/png;base64,{{ image_base64 }}" alt="No Picture" style="max-width: 100%;height:auto;"> -->
 	    </div>
 
 	    <legend class="border-bottom mb-4 container"></legend>

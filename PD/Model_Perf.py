@@ -126,16 +126,16 @@ def Confusion_matrix_plot(function, X_test, Y_test, X_train, Y_train, threshold)
 #      , train_test.Y_train, threshold=0.5))
 
 
-def Prediction(function, X_test, X_train, Y_train):
+def Prediction(function, Y_train, X_train, X_test):
      
-    res = function(X_train, Y_train)[1]
-    predict_probability = res.predict(X_test)
+    res = function(Y_train, X_train)[1]
+    predict_probability = res.predict(X_test.values)
     #print(predict_probability)
-    k = [round(i,10) for i in predict_probability.values.tolist()]
+    k = [round(i,10) for i in predict_probability.tolist()]
     #print(k)
     predict_binary = k.copy()
     #print(predict_binary)
 
     return predict_binary
 
-#print(Prediction(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.X_train, train_test.Y_train))
+#print(Prediction(GLM_Bino.GLM_Binomial_fit, train_test.Y_train.values.reshape(-1,1), train_test.X_train, train_test.X_test))

@@ -11,6 +11,8 @@
 
 #if __name__ == '__main__':
 
+import pdb
+
 import ED
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
@@ -48,6 +50,7 @@ def One_Hot_Encoding_Func_Stat(dataframe):
     return df_loan_categorical_encoded
 
 df_loan_categorical_encoded = One_Hot_Encoding_Func_Stat(missing_adhoc.df_loan_categorical_mode)
+#print(df_loan_categorical_encoded)
 
 # ==================================
 # Machine Learning One Hot Encoding
@@ -85,8 +88,10 @@ def Create_X_Y(dataframe_float, dataframe_categorical, target):
     
     return X, Y
 
-# X, Y = Create_X_Y(dataframe_float = ED.df_loan_float, dataframe_categorical = df_loan_categorical_encoded\
-#               , target = ED.df_loan_float["GB"])
+X, Y = Create_X_Y(dataframe_float = ED.df_loan_float, dataframe_categorical = df_loan_categorical_encoded\
+               , target = ED.df_loan_float["GB"])
+
+#pdb.set_trace()
 
 # ============================================
 # Defining Independent and Dependent variables
@@ -129,3 +134,7 @@ X_train, X_test, Y_train, Y_test = Split_Xtrain_Ytrain(ED.df_loan_float, df_loan
 X_train = X_train.drop(labels=["_freq_"], axis=1) # temp, for mach it has to be dropped
 
 X_test = X_test.drop(labels=["_freq_"], axis=1) # temp
+
+#print(X_train)
+#print(X_test)
+#print(Y_train)

@@ -6,22 +6,25 @@ import train_test
 #import scipy.stats
 import pickle
 
+#print(train_test.Y_train.values)
+#print(train_test.X_train.values)
+
 # GLM FIT-BINOMIAL
 # =================
 
-def GLM_Binomial_fit(X_train, Y_train):
+def GLM_Binomial_fit(Y_train, X_train):
     
     '''GLM Binomial fit'''
-    
-    glm_binom = sm.GLM(Y_train.values.reshape(-1,1), X_train, family=sm.families.Binomial())   
+    X_train = X_train.values
+    glm_binom = sm.GLM(Y_train, X_train, family=sm.families.Binomial())   
     res = glm_binom.fit()
     
     return res.summary(), res
 
-#m = (GLM_Binomial_fit(train_test.X_train, train_test.Y_train))[0]
+m = (GLM_Binomial_fit(train_test.Y_train.values.reshape(-1,1), train_test.X_train))[1]
 #print(m)
 
-#print(m.predict(train_test.X_test))
+#print(m.predict(train_test.X_test.values))
 #print(dir(m))
 
 #p_val = scipy.stats.chi2.pdf(2356, 1957)

@@ -2,23 +2,16 @@ import tracemalloc
 
 tracemalloc.start()
 
-import statsmodels.api as sm
-import pandas as pd
-import sys
-import pickle
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
+import sys
+import os
 from pathlib import Path
 from django.template import loader
-from django.http import HttpResponse
-
-#sys.path.append('/home/humbulani/refactored_pd')
-sys.path.append('/home/humbulani/New/django_project/refactored_pd')
-
-from .forms import Inputs, Side
 
 sys.path.append('/home/humbulani/New/django_project/PD')
+
+from .forms import Inputs, Side
 
 from django.templatetags.static import static
 
@@ -30,17 +23,6 @@ import GLM_Bino
 import matplotlib.pyplot as plt
 import Diagnostics
 import io
-import base64
-
-#from django.templatetags.static import static
-
-from class_traintest import OneHotEncoding
-from class_base import Base
-from pd_download import data_cleaning
-from class_missing_values import ImputationCat
-
-with open('/home/humbulani/New/django_project/deploy/glm_binomial.pkl','rb') as file:
-        loaded_model = pickle.load(file)
 
 # Performance measures
 
@@ -82,26 +64,7 @@ def normal_plot(request):
 
 def residuals(request):
 
-    f = Diagnostics.Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.Y_train.values.reshape(-1,1)\
-              ,train_test.X_train, train_test.X_test, train_test.Y_test, threshold=0.8)
-
-    buffer = io.BytesIO()
-    f.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_base64 = base64.b64encode(buffer.getvalue()).decode()
-
-    buffer.close()
-
-    # response = f'<img src="data:image/png;base64,{image_base64}">'
-
-    # return HttpResponse(response)
-
-    # response = HttpResponse(buffer.read(), content_type='image/png')
-    # response['Content-Disposition'] = 'attachment; filename="residual_plot.png"'
-
-    return render (request, 'residuals.html', {'image_base64':image_base64})
-
-    #buffer.close()
+     return render (request, 'residuals.html')
 
 def partial(request):
 
@@ -119,7 +82,7 @@ def cooks(request):
 
 def home(request):
 
-    return render(request, 'newhome.html')
+    return render(request, 'home.html')
 
 def inputs(request):
 
@@ -135,8 +98,8 @@ def inputs(request):
         side_bar = Side(request.POST)
         if form.is_valid():
 
-            # Float features
-            
+        	# Float features
+        	
             NAME = form.cleaned_data.get("NAME")
             AGE = form.cleaned_data.get("AGE")
             CHILDREN = form.cleaned_data.get("CHILDREN")
@@ -157,17 +120,17 @@ def inputs(request):
             DIV = form.cleaned_data.get("DIV")
             CASH = form.cleaned_data.get("CASH")
             
-            
-            # Categorical features
-            # 
+    	    
+    	    # Categorical features
+    	    # 
             TITLE = form.cleaned_data.get("TITLE")
             H = 0
             if TITLE == 'H':
-                H=1
-                # list_.append(H)
+    	        H=1
+    	        # list_.append(H)
             else:
-                H=0
-                # list_.append(H)
+    	        H=0
+    	        # list_.append(H)
             #input_ = [H]
             #
             STATUS = form.cleaned_data.get("STATUS")
@@ -192,15 +155,15 @@ def inputs(request):
             Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT = 0,0,0,0,0    
 
             if PRODUCT=='Furniture_Carpet':
-                Furniture_Carpet=1
+    	        Furniture_Carpet=1
             elif PRODUCT=='Dept_Store_Mail':
-                Dept_Store_Mail=1
+    	        Dept_Store_Mail=1
             elif PRODUCT=='Leisure':
-                Leisure=1
+    	        Leisure=1
             elif PRODUCT=='Cars':
-                Cars=1
+    	        Cars=1
             elif PRODUCT=='OT':
-                OT=1
+    	        OT=1
             else:
                 Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT = 0,0,0,0,0   
 
@@ -209,7 +172,7 @@ def inputs(request):
             Lease = 0    
 
             if RESID=='Lease':
-                Lease=1    
+    	        Lease=1    
 
             else:
                 Lease=0
@@ -304,10 +267,9 @@ def inputs(request):
 
             list_ = inputs2 + inputs1
 
-            inputs = np.array(list_)
-            inputs = sm.add_constant(inputs)  
+            inputs = pd.Series(list_)  
             
-            answer = loaded_model.predict(inputs).round(2)   
+            answer = np.round(Model_Perf.Prediction(GLM_Bino.GLM_Binomial_fit,inputs, train_test.X_train, train_test.Y_train),10)   
 
 
             #return redirect('deployment') 
@@ -322,3 +284,18 @@ def inputs(request):
 print(tracemalloc.get_traced_memory())
 
 tracemalloc.stop()
+
+# def Sides(request):
+
+#     if request.method == 'POST':
+#         side_bar = Side(request.POST)
+#         # if side_bar.is_valid():
+
+
+
+#     else:
+#         side_bar = Side()
+
+
+#     return render(request, 'side.html', {'side_bar':side_bar,'AGE':AGE,'TITLE':TITLE,'list_':list_,'answer':answer})
+

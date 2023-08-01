@@ -1,0 +1,99 @@
+
+
+.center-link {
+			display: block;
+			text-align: center;
+		      }
+
+		.centered {
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);
+		          }
+
+		.left {
+		    position: fixed;
+		    top: 50%;
+		    left: 40%;
+		    transform: translate(-50%, -40%);
+		       }
+
+		.vertical-line {
+		    width: 2px;
+		    height: 100px;
+		    background-color: #000;
+		    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		    margin: 0 20px;
+
+		        }
+
+		 .containerd {
+			display: flex;
+			justify-content: inline-block;
+		    align-items: center;
+		    height: 100vh;
+/*            width: 1000px;*/
+             padding: 20px;
+            /*background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;*/
+	                 }
+
+		  .box {
+		    flex: 1;
+		    display: inline-block;
+		    justify-content: center;
+	         align-items: center;
+	        /* padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;*/
+		       }
+
+/*		    .box + .box {margin-left: 350px;}*/
+
+		  .box1 {
+			   height: 50vh;
+			   background-color: red;
+		        }
+
+		  .mybtn {
+			   background-color: whitesmoke;
+			   text-align: center;
+			   display: inline-block;
+			   font-size: 15px;
+			   cursor: pointer;
+			   padding: 10px 20px;
+			   border:2px solid #000;
+			   border-radius: 50px;
+			   text-decoration: none;
+			   color: #000;
+			   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			   font-weight: bold;
+			   transition: box-shadow 0.3s ease;
+
+			      }
+
+			.mybtn:hover {
+                          background-color: #d0d0d0;
+                          box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			             }
+
+
+             footer {
+
+             	    background-color: #fff;
+                    height: 50px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+                    }
+
+             .nav-shadow {
+
+             	    background-color: #fff;
+                    height: 60px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+                    }
+
