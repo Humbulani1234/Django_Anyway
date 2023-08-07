@@ -1,18 +1,12 @@
 
 
 import streamlit as st 
-import train_test
-import Model_Perf
-import ED
 import matplotlib.pyplot as plt
-import GLM_Bino
 import warnings
-import missing_adhoc
 import pandas as pd
 from PIL import Image
-import clustering
+#import clustering
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-import Diagnostics
 from scipy.stats import norm
 import pylab
 import statsmodels.stats.diagnostic as sd
@@ -22,24 +16,26 @@ import scipy
 from scipy import stats
 from math import *
 from sklearn.tree import DecisionTreeClassifier
-import train_test1
 from sklearn.tree import plot_tree
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import cross_val_score
-import Decision_tree
+#import Decision_tree
 
+
+from class_traintest import OneHotEncoding
+from class_base import Base
+from pd_download import data_cleaning
+from class_missing_values import ImputationCat
 import class_diagnostics
 
 # ---------------------------------------------global options ---------------------------------------------------------------
  
-
 st.set_option('deprecation.showPyplotGlobalUse', False)
 pd.set_option("display.width", 3000)
 pd.set_option("display.max_columns", 3000)
 pd.set_option("display.max_rows", 3000)
 pd.set_option("display.float_format", lambda x: "%.0f" %x)
 warnings.filterwarnings("ignore")
-
 
 # -------------------------------------------------------------------BaseClass--------------------------------------------------------
 
@@ -57,71 +53,65 @@ class BaseStreamlit():
 
 # ---------------------------------------------------------Logistic------------------------------------------------------------------
 
-class Logistic(BaseStreamlit):
+class Logistic(class_diagnostics.ResidualsPlot):
 
-    def __init__(self):
+    def log_get_diagnostics(self, name):
 
-        pass
-
-
-    def log_get_diagnostics(self, name, func, x_test, y_test, x_train, y_train, threshold):
-
-        self.data = None
+        data = None
 
         if name=='Quantile Res':
 
-            st.write('Quantile Residuals',Diagnostics.Quantile_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test
-                                                                         ,train_test.Y_test, train_test.X_train, train_test.Y_train, 
-                                                                          threshold=0.47))
+            # st.write('Quantile Residuals',Diagnostics.Quantile_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.X_test
+            #                                                              ,train_test.Y_test, train_test.X_train, train_test.Y_train, 
+            #                                                               threshold=0.47))
 
-            self.data = class_diagnostics.ResidualsPlot(func, x_test, y_test, x_train, y_train, threshold
-                                                        ,{'figure.figsize': (8,6), 'axes.titlesize':12}).plot_residuals()
+            data = super().plot_quantile_residuals()
 
-        elif name=='Breush_Pagan_Test':
+        # elif name=='Breush_Pagan_Test':
 
-            st.write('Breush_Pagan_Test',Diagnostics.Breush_Pagan_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47))
-            #st.pyplot()
-            #data = gca()
+        #     # st.write('Breush_Pagan_Test',Diagnostics.Breush_Pagan_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+        #     #     ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47))
+        #     # #st.pyplot()
+        #     # #data = gca()
 
-        elif name=='Normal_Residual_Test':
+        # elif name=='Normal_Residual_Test':
 
-            st.write('Normal_Residual_Test',Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47))
-            Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-            #st.pyplot()
-            #data = gca()
+        #     # st.write('Normal_Residual_Test',Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+        #     #     ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47))
+        #     # Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+        #     #     ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+        #     # #st.pyplot()
+        #     # #data = gca()
 
-        elif name=='Durbin_Watson_Test':
+        # elif name=='Durbin_Watson_Test':
 
-            st.write('Durbin_Watson_Test',Diagnostics.Durbin_Watson_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47))
-            #st.pyplot()
-            #data = gca()
+        #     # st.write('Durbin_Watson_Test',Diagnostics.Durbin_Watson_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+        #     #     ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47))
+        #     # #st.pyplot()
+        #     # #data = gca()
 
-        elif name=='Partial_Plots':
+        # elif name=='Partial_Plots':
 
-            Diagnostics.Partial_Plots(GLM_Bino.GLM_Binomial_fit, train_test.X_test["AGE"],train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-            #st.pyplot()
-            #data = gca()
+        #     Diagnostics.Partial_Plots(GLM_Bino.GLM_Binomial_fit, train_test.X_test["AGE"],train_test.X_test\
+        #         ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+        #     #st.pyplot()
+        #     #data = gca()
 
-        elif name=='Leverage_Studentized_Quantile_Res':
+        # elif name=='Leverage_Studentized_Quantile_Res':
 
-            Diagnostics.Leverage_Studentized_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-            #st.pyplot()
-            #data = gca()
+        #     Diagnostics.Leverage_Studentized_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+        #         ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+        #     #st.pyplot()
+        #     #data = gca()
         
-        else:
+        # else:
 
-            Diagnostics.Cooks_Distance_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
-                ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
-            #st.pyplot()
-            #data = gca()
+        #     Diagnostics.Cooks_Distance_Quantile_Res(GLM_Bino.GLM_Binomial_fit, train_test.X_test\
+        #         ,train_test.Y_test, train_test.X_train, train_test.Y_train, threshold=0.47)
+        #     #st.pyplot()
+        #     #data = gca()
 
-        return self.data
+        return data
 
     def log_get_prediction(self):  
 
@@ -330,10 +320,11 @@ class Logistic(BaseStreamlit):
 
 # ------------------------------------------------------main function (entry point) ------------------------------------------------------
 
-def main(func, x_test, y_test, x_train, y_train, threshold):
+def main(custom_rcParams, x_test, y_test, threshold):
 
+    # class_diagnostics.ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
     basestreamlit = BaseStreamlit("humbu",'pngegg.png', "humbu", ('Logistic', 'Decision'))
-    logistic = Logistic()
+    logistic = Logistic(custom_rcParams, x_test, y_test, threshold)
     #decision = Decision()
     
     #basestreamlit.title
@@ -350,7 +341,7 @@ def main(func, x_test, y_test, x_train, y_train, threshold):
         diagnostics_name=st.sidebar.selectbox('Select Diagnostic', ('Quantile Res','Breush_Pagan_Test','Normal_Residual_Test'\
         ,'Durbin_Watson_Test','Partial_Plots','Leverage_Studentized_Quantile_Res','Cooks_Distance_Quantile_Res'))
         # get_dataset(dataset_name)
-        figure = logistic.log_get_diagnostics(diagnostics_name,func, x_test, y_test, x_train, y_train, threshold)
+        figure = logistic.log_get_diagnostics(diagnostics_name)
         #print(type(figure))
         st.pyplot(figure)
         # get_data(visualization_name)
@@ -361,5 +352,17 @@ def main(func, x_test, y_test, x_train, y_train, threshold):
  
 if __name__ == "__main__":
 
-    main(func = GLM_Bino.GLM_Binomial_fit, x_test=train_test.X_test, y_test=train_test.Y_test
-        , x_train=train_test.X_train, y_train=train_test.Y_train.to_frame(), threshold=0.47)
+    file_path = "KGB.sas7bdat"
+    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+    miss = ImputationCat(df_loan_categorical)
+    imputer_cat = miss.simple_imputer_mode()
+
+    custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+
+    instance = OneHotEncoding(custom_rcParams, imputer_cat, True)
+    x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
+    x_test = sm.add_constant(x_test.values)
+    y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
+    threshold = 0.47
+
+    main(custom_rcParams , x_test, y_test, threshold)

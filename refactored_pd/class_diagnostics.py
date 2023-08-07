@@ -21,6 +21,7 @@ from __future__ import annotations
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 from scipy.stats import norm
 from statsmodels.stats.stattools import durbin_watson
@@ -30,7 +31,6 @@ from scipy.stats import probplot, normaltest
 from math import sqrt
 import statsmodels.api as sm
 import pickle
-
 
 from class_modelperf import ModelPerfomance
 from class_traintest import OneHotEncoding
@@ -43,14 +43,9 @@ from glm_binomial import glm_binomial_fit
 
 class QuantileResiduals(ModelPerfomance):
 
-
     def quantile_residuals(self):
 
-        """ It did not execute the code after raise TypeError beacuse the for loop
-        was directly below it, hence it was not executing the code at all since the first if
-        was False and not executed """
-
-        self.residuals = []
+        residuals = []
 
         try:
             if not isinstance(self.x_test, np.ndarray):
@@ -68,17 +63,17 @@ class QuantileResiduals(ModelPerfomance):
                     if (self.predict_probability[i] < self.threshold):
 
                         u_1 = np.random.uniform(low=0, high=self.predict_probability[i])
-                        self.residuals.append(norm.ppf(u_1))
+                        residuals.append(norm.ppf(u_1))
 
                     else:
 
                         u_2 = np.random.uniform(low=self.predict_probability[i], high=1)
-                        self.residuals.append(norm.ppf(u_2))
+                        residuals.append(norm.ppf(u_2))
 
                 elif (self.threshold < 0 or self.threshold > 1):
                     raise ValueError("threshold outside bounds: [0-1]")
 
-            quantile_residuals_series = pd.Series(self.residuals).round(2)
+            quantile_residuals_series = pd.Series(residuals).round(2)
 
             return quantile_residuals_series
 
@@ -90,13 +85,6 @@ class QuantileResiduals(ModelPerfomance):
 #------------------------------------------------------------Residuals Plot---------------------------------------
 
 class ResidualsPlot(QuantileResiduals):
-
-    # def __init__(self, func, x_test, y_test, x_train, y_train, threshold,custom_rcParams: dict) -> None:
-
-    #     super().__init__(func, x_test, y_test, x_train, y_train, threshold)
-
-    #     self.custom_rcParams = plt.rcParams.update(custom_rcParams)
-
 
     def plot_quantile_residuals(self):
 
@@ -111,7 +99,7 @@ class ResidualsPlot(QuantileResiduals):
                 raise ValueError ("residuals empty")
 
             self.axs.plot(quantile_residuals_series.index, quantile_residuals_series.values)
-            super()._plotting("humbu", "x", "y")
+            super().plotting("humbu", "x", "y")
 
             return self.fig
         
@@ -322,14 +310,17 @@ if __name__ == "__main__":
     threshold = 0.47
     func = glm_binomial_fit
 
-    p = ModelPerfomance(custom_rcParams, func, x_test, y_test, x_train, y_train, threshold)
+    p = ModelPerfomance(custom_rcParams, x_test, y_test, threshold)
     #c = p.confusion_matrix_plot()
-    r = p.confusion_matrix_plot()
+    #r = p.confusion_matrix_plot()
     #plt.show()
 
     # Diagnostics
     
-    q = QuantileResiduals(custom_rcParams, func, x_test, y_test, x_train, y_train, threshold)
-    r = q.quantile_residuals()
-    print(r)
+    # a = QuantileResiduals(custom_rcParams, func, x_test, y_test, x_train, y_train, threshold)
+    # b = a.quantile_residuals()
+    # print(r)
 
+    b = ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
+    c = b.plot_quantile_residuals()
+    plt.show()

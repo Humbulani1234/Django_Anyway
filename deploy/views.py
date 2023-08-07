@@ -2,10 +2,13 @@ import tracemalloc
 
 tracemalloc.start()
 
-import statsmodels.api as sm
 import pandas as pd
 import sys
 import pickle
+import types
+import io
+import base64
+import statsmodels.api as sm
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -13,95 +16,64 @@ from pathlib import Path
 from django.template import loader
 from django.http import HttpResponse
 
-#sys.path.append('/home/humbulani/refactored_pd')
-sys.path.append('/home/humbulani/New/django_project/refactored_pd')
-
 from .forms import Inputs, Side
 
-sys.path.append('/home/humbulani/New/django_project/PD')
-
-from django.templatetags.static import static
-
-import Model_Perf
-import pandas as pd
-import numpy as np
-import train_test
-import GLM_Bino
-import matplotlib.pyplot as plt
-import Diagnostics
-import io
-import base64
-
-#from django.templatetags.static import static
+sys.path.append('/home/humbulani/New/django_project/refactored_pd')
 
 from class_traintest import OneHotEncoding
 from class_base import Base
 from pd_download import data_cleaning
 from class_missing_values import ImputationCat
+import class_diagnostics
 
-with open('/home/humbulani/New/django_project/deploy/glm_binomial.pkl','rb') as file:
-        loaded_model = pickle.load(file)
+#-------------------------------------------------------------------Defined variables-----------------------------------------------------------
 
-# Performance measures
+# sys.path.append('/home/humbulani/New/django_project/refactored_pd')
 
-def roc(request):
+file_path = "static/KGB.sas7bdat"
+data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+miss = ImputationCat(df_loan_categorical)
+imputer_cat = miss.simple_imputer_mode()
 
-    # #g, ax = plt.subplots(figsize=(3,4))
+custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-    # f = Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-    #                                       ,train_test.Y_train)
-                                         
-    # # f = Model_Perf.ROC_Curve_Analytics(ax,GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-    # #                                        ,train_test.Y_train)[1][0]                              
+instance = OneHotEncoding(custom_rcParams, imputer_cat, True)
+x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
+x_test = sm.add_constant(x_test.values)
+y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
+threshold = 0.47
+
+b = class_diagnostics.ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
+
+
+#------------------------------------------------------------------ Performance measures---------------------------------------------------------
+
+def roc(request):                            
 
     return render (request, 'roc.html')
+
 
 def confusion_logistic(request):
 
      return render (request, 'confusion_logistic.html')
 
-# Model Diagnostics
-
+#-------------------------------------------------------------------Model Diagnostics------------------------------------------------------------
 
 def normal_plot(request):
 
-    # f = Diagnostics.Normal_Residual_Test(GLM_Bino.GLM_Binomial_fit, train_test.X_test, train_test.Y_test, train_test.X_train\
-    #                                       ,train_test.Y_train,threshold=0.47)
-    # buffer = io.BytesIO()
-    # fig.savefig(buffer, format='png')
-    # buffer.seek(0)
-
-    # plt.close()
-
-    # response = HttpResponse(buffer.read(), content_type='image/png')
-    # response['Content-Disposition'] = 'attachment; filename="normal_plot.png"'
-
-    #return response
-
     return render (request, 'normal_plot.html')
+
 
 def residuals(request):
 
-    f = Diagnostics.Plot_Residuals(GLM_Bino.GLM_Binomial_fit, train_test.Y_train.values.reshape(-1,1)\
-              ,train_test.X_train, train_test.X_test, train_test.Y_test, threshold=0.8)
-
+    f = b.plot_quantile_residuals()
     buffer = io.BytesIO()
     f.savefig(buffer, format='png')
     buffer.seek(0)
     image_base64 = base64.b64encode(buffer.getvalue()).decode()
-
     buffer.close()
 
-    # response = f'<img src="data:image/png;base64,{image_base64}">'
-
-    # return HttpResponse(response)
-
-    # response = HttpResponse(buffer.read(), content_type='image/png')
-    # response['Content-Disposition'] = 'attachment; filename="residual_plot.png"'
-
     return render (request, 'residuals.html', {'image_base64':image_base64})
-
-    #buffer.close()
 
 def partial(request):
 
@@ -115,11 +87,11 @@ def cooks(request):
 
      return render (request, 'cooks.html')
 
-
+#-------------------------------------------------------------------Home and Models------------------------------------------------------------------
 
 def home(request):
 
-    return render(request, 'newhome.html')
+    return render(request, 'home.html')
 
 def inputs(request):
 
@@ -128,6 +100,7 @@ def inputs(request):
     TITLE = 6
     list_=[]
     answer=''
+    print(request.COOKIES)
 
 
     if request.method == 'POST':
@@ -159,17 +132,17 @@ def inputs(request):
             
             
             # Categorical features
-            # 
+            
             TITLE = form.cleaned_data.get("TITLE")
+
             H = 0
+
             if TITLE == 'H':
                 H=1
-                # list_.append(H)
+    
             else:
                 H=0
-                # list_.append(H)
-            #input_ = [H]
-            #
+            
             STATUS = form.cleaned_data.get("STATUS")
 
             V, U, G, E, T = 0,0,0,0,0    
@@ -294,13 +267,13 @@ def inputs(request):
 
 
 
-            inputs1 = [H,V, U, G, E, T,Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Lease,German, Turkish, RS, Greek ,Italian\
-             , Other_European, Spanish_Portugue,Others, Civil_Service_M , Self_employed_pe, Food_Building_Ca, Chemical_Industr\
-             , Pensioner ,Sea_Vojage_Gast, Military_Service,Car,Car_and_Motor_bi,no_credit_cards, Mastercard_Euroc, VISA_mybank,VISA_Others\
-             , Other_credit_car, American_Express]
+            inputs1 = [ H,V, U, G, E, T,Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Lease,German, Turkish, RS, Greek ,Italian
+                      , Other_European, Spanish_Portugue,Others, Civil_Service_M , Self_employed_pe, Food_Building_Ca, Chemical_Industr
+                      , Pensioner ,Sea_Vojage_Gast, Military_Service,Car,Car_and_Motor_bi,no_credit_cards, Mastercard_Euroc, VISA_mybank
+                      , VISA_Others, Other_credit_car, American_Express ] 
             
-            inputs2 = [CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
-             , REGN, DIV, CASH]    
+            inputs2 = [ CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
+             , REGN, DIV, CASH ]    
 
             list_ = inputs2 + inputs1
 
@@ -308,9 +281,6 @@ def inputs(request):
             inputs = sm.add_constant(inputs)  
             
             answer = loaded_model.predict(inputs).round(2)   
-
-
-            #return redirect('deployment') 
 
     else:
 
@@ -322,3 +292,15 @@ def inputs(request):
 print(tracemalloc.get_traced_memory())
 
 tracemalloc.stop()
+
+# ------------------------------------------------------------------Consider----------------------------------------------------------
+
+# def image_generator(func, b):
+    
+#     bound = types.MethodType(func, b)
+#     f = bound()
+#     buffer = io.BytesIO()
+#     f.savefig(buffer, format='png')
+#     buffer.seek(0)
+#     image_base64 = base64.b64encode(buffer.getvalue()).decode()
+#     buffer.close()

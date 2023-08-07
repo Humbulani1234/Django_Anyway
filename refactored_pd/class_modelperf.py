@@ -28,20 +28,17 @@ from glm_binomial import glm_binomial_fit
 
 # --------------------------------------------------------Model Perfomance class----------------------------------------------------------
 
-with open('glm_binomial.pkl','rb') as file:
+with open('static/glm_binomial.pkl','rb') as file:
         loaded_model = pickle.load(file)
 
 class ModelPerfomance(Base):
 
-    def __init__(self, custom_rcParams, func, x_test, y_test, x_train, y_train, threshold):
+    def __init__(self, custom_rcParams, x_test, y_test, threshold):
 
         super().__init__(custom_rcParams)
 
         self.x_test = x_test
         self.y_test = y_test
-        self.x_train = x_train
-        self.y_train = y_train
-        self.function = func
         self.threshold = threshold
 
         self.predict_glm = loaded_model.predict(self.x_test)
@@ -119,7 +116,7 @@ class ModelPerfomance(Base):
 if __name__ == "__main__":
 
     
-    file_path = "./KGB.sas7bdat"
+    file_path = ".static/KGB.sas7bdat"
     data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
     miss = ImputationCat(df_cat=df_loan_categorical)
     imputer_cat = miss.simple_imputer_mode()
@@ -159,7 +156,7 @@ if __name__ == "__main__":
     threshold = 0.47
     func = glm_binomial_fit
 
-    p = ModelPerfomance(custom_rcParams, func, x_test, y_test, x_train, y_train, threshold)
+    p = ModelPerfomance(custom_rcParams, x_test, y_test, threshold)
     #c = p.confusion_matrix_plot()
     r = p.confusion_matrix_plot()
     plt.show()

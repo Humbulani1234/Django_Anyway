@@ -1,3 +1,6 @@
+
+<!DOCTYPE html>
+
 {% load widget_tweaks %}
 {% load crispy_forms_tags %} 
 {% load bootstrap5 %}
@@ -21,7 +24,9 @@
   <body style="background-color:floralwhite;">
 
       <nav class="navbar navbar-expand-lg navbar-light bg-light nav-shadow">
-        <a class="navbar-brand" href="#"><button onclick="history.back()" style="background-color:green; font-size:12px;">Go Back</button></a>
+        <a class="navbar-brand" href="#">
+          <button class="goback" onclick="history.back()">Go Back</button>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
         </button> 
 
@@ -31,7 +36,7 @@
 
               <span><li class="nav-item dropdown">
 
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Performance</a>
+                  <a class="nav-link dropdown-toggle mybtn1" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Performance</a>
 
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="http://ec2-13-244-95-66.af-south-1.compute.amazonaws.com/Logistic/Roc">ROC curve</a>
@@ -42,12 +47,12 @@
 
                <span><li class="nav-item dropdown">
 
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Diagnostics</a>
+                  <a class="nav-link dropdown-toggle mybtn1" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Diagnostics</a>
 
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                      <a class="dropdown-item" href="http://ec2-13-244-95-66.af-south-1.compute.amazonaws.com/Logistic/Residuals">Residuals</a> 
-                      <!-- <a class="dropdown-item" href="http:/localhost:8000/Logistic/Residuals">Residuals</a>  -->
+                      <!-- <a class="dropdown-item" href="http://ec2-13-244-95-66.af-south-1.compute.amazonaws.com/Logistic/Residuals">Residuals</a>  -->
+                      <a class="dropdown-item" href="http:/localhost:8000/Logistic/Residuals">Residuals</a> 
                       <a class="dropdown-item" href="http://ec2-13-244-95-66.af-south-1.compute.amazonaws.com/Logistic/Student">Student Residuals</a>  
                       <a class="dropdown-item" href="http://ec2-13-244-95-66.af-south-1.compute.amazonaws.com/Normal">Normal Plot</a> 
                       <a class="dropdown-item" href="http://ec2-13-244-95-66.af-south-1.compute.amazonaws.com/Logistic/Cooks">Cooks Distance</a>  
@@ -69,11 +74,19 @@
       </nav>
 
       <legend class="border-bottom mb-4 container"></legend>
+
       <div class="contained container">
-       <img src="{% static 'data.png' %}" alt="No Picture" style="max-width: 100%;height:auto;">
-    </div>
+
+        <!-- <div class="hole-content"> -->
+           <img src="{% static 'data.png' %}" alt="No Picture"
+           style="max-width: 100%;height:auto;">
+        <!-- </div> -->
+
+      </div>
+
       <legend class="border-bottom mb-4 container"></legend>
-      <div class="container form-shadow"> 
+
+       <div class="container form-shadow"> 
           
               <form method="POST" class="form-horizontal">
 
