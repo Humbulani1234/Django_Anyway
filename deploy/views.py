@@ -1,8 +1,8 @@
 import tracemalloc
-
 tracemalloc.start()
 
 import pandas as pd
+import numpy as np
 import sys
 import pickle
 import types
@@ -20,72 +20,96 @@ from .forms import Inputs, Side
 
 sys.path.append('/home/humbulani/New/django_project/refactored_pd')
 
+import pd_download
 from class_traintest import OneHotEncoding
 from class_base import Base
-from pd_download import data_cleaning
 from class_missing_values import ImputationCat
 import class_diagnostics
+from class_modelperf import ModelPerfomance
 
 #-------------------------------------------------------------------Defined variables-----------------------------------------------------------
 
-# sys.path.append('/home/humbulani/New/django_project/refactored_pd')
+with open('static/glm_binomial.pkl','rb') as file:
+        loaded_model = pickle.load(file)
 
 file_path = "static/KGB.sas7bdat"
-data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+data_types, df_loan_categorical, df_loan_float = pd_download.data_cleaning(file_path)    
 miss = ImputationCat(df_loan_categorical)
 imputer_cat = miss.simple_imputer_mode()
 
-custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+custom_rcParams = {"figure.figsize": (15, 10), "axes.labelsize": 12}
 
-instance = OneHotEncoding(custom_rcParams, imputer_cat, True)
+instance = OneHotEncoding(custom_rcParams, imputer_cat, "statistics")
 x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
 x_test = sm.add_constant(x_test.values)
 y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
 threshold = 0.47
 
 b = class_diagnostics.ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
+c = ModelPerfomance(custom_rcParams, x_test, y_test, threshold)
 
+def image_generator(f):
 
-#------------------------------------------------------------------ Performance measures---------------------------------------------------------
-
-def roc(request):                            
-
-    return render (request, 'roc.html')
-
-
-def confusion_logistic(request):
-
-     return render (request, 'confusion_logistic.html')
-
-#-------------------------------------------------------------------Model Diagnostics------------------------------------------------------------
-
-def normal_plot(request):
-
-    return render (request, 'normal_plot.html')
-
-
-def residuals(request):
-
-    f = b.plot_quantile_residuals()
     buffer = io.BytesIO()
     f.savefig(buffer, format='png')
     buffer.seek(0)
     image_base64 = base64.b64encode(buffer.getvalue()).decode()
     buffer.close()
 
+    return image_base64
+
+#------------------------------------------------------------------ Performance measures---------------------------------------------------------
+
+def roc(request):
+
+    f = c.roc_curve_analytics()
+    image_base64 = image_generator(f)                 
+
+    return render (request, 'roc.html', {'image_base64':image_base64})
+
+def confusion_logistic(request):
+
+    f = c.confusion_matrix_plot()
+    image_base64 = image_generator(f)
+
+    return render (request, 'confusion_logistic.html', {'image_base64':image_base64})
+
+#-------------------------------------------------------------------Model Diagnostics------------------------------------------------------------
+
+def normal_plot(request):
+
+    f = b.plot_normality_quantile()
+    image_base64 = image_generator(f)
+
+    return render (request, 'normal_plot.html', {'image_base64':image_base64})
+
+def residuals(request):
+
+    f = b.plot_quantile_residuals()
+    image_base64 = image_generator(f)
+
     return render (request, 'residuals.html', {'image_base64':image_base64})
 
 def partial(request):
 
-     return render (request, 'partial.html')
+    f = b.partial_plots_quantile()
+    image_base64 = image_generator(f)
+
+    return render (request, 'partial.html', {'image_base64':image_base64})
 
 def student(request):
 
-     return render (request, 'student.html')
+    f = b.plot_lev_stud_quantile()
+    image_base64 = image_generator(f)
+
+    return render (request, 'student.html', {'image_base64':image_base64})
 
 def cooks(request):
 
-     return render (request, 'cooks.html')
+    f = b.plot_cooks_dis_quantile()
+    image_base64 = image_generator(f)
+
+    return render (request, 'cooks.html', {'image_base64':image_base64})
 
 #-------------------------------------------------------------------Home and Models------------------------------------------------------------------
 
@@ -95,13 +119,9 @@ def home(request):
 
 def inputs(request):
 
-    global AGE, TITLE, list_1, answer
-    AGE = 8
-    TITLE = 6
-    list_=[]
-    answer=''
-    print(request.COOKIES)
+    #print(request.COOKIES)
 
+    answer = ""
 
     if request.method == 'POST':
         form = Inputs(request.POST)
@@ -272,35 +292,21 @@ def inputs(request):
                       , Pensioner ,Sea_Vojage_Gast, Military_Service,Car,Car_and_Motor_bi,no_credit_cards, Mastercard_Euroc, VISA_mybank
                       , VISA_Others, Other_credit_car, American_Express ] 
             
-            inputs2 = [ CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
+            inputs2 = [ 1, CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
              , REGN, DIV, CASH ]    
 
             list_ = inputs2 + inputs1
-
-            inputs = np.array(list_)
-            inputs = sm.add_constant(inputs)  
-            
-            answer = loaded_model.predict(inputs).round(2)   
+            inputs = np.array(list_).reshape(1,-1)
+            answer = loaded_model.predict(inputs.reshape(1,-1)).round(10)  
 
     else:
 
         form = Inputs()
         side_bar = Side()
 
-    return render(request, 'features.html', {'form':form,'side_bar':side_bar,'answer':answer})
+    return render(request, 'features.html', {'form':form, 'answer':answer})
 
 print(tracemalloc.get_traced_memory())
-
 tracemalloc.stop()
 
 # ------------------------------------------------------------------Consider----------------------------------------------------------
-
-# def image_generator(func, b):
-    
-#     bound = types.MethodType(func, b)
-#     f = bound()
-#     buffer = io.BytesIO()
-#     f.savefig(buffer, format='png')
-#     buffer.seek(0)
-#     image_base64 = base64.b64encode(buffer.getvalue()).decode()
-#     buffer.close()

@@ -116,7 +116,7 @@ class ModelPerfomance(Base):
 if __name__ == "__main__":
 
     
-    file_path = ".static/KGB.sas7bdat"
+    file_path = "static/KGB.sas7bdat"
     data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
     miss = ImputationCat(df_cat=df_loan_categorical)
     imputer_cat = miss.simple_imputer_mode()
@@ -129,7 +129,7 @@ if __name__ == "__main__":
 
     custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-    instance = OneHotEncoding(custom_rcParams, imputer_cat, True)
+    instance = OneHotEncoding(custom_rcParams, imputer_cat, "statistics")
     #instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
     
     x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]

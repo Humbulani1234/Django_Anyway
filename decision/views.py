@@ -1,22 +1,59 @@
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-import sys
-import os
-
-sys.path.append('/home/humbulani/New/django_project/')
-
-from .forms import In, Si
-
-from django.templatetags.static import static
-#url = static('KGB.sas7bdat')
-#print(os.getcwd())
-
 import pandas as pd
 import numpy as np
-import Decision_tree
+import pickle
+import sys
 
+sys.path.append('/home/humbulani/New/django_project/refactored_pd')
 
+from .forms import In, Si
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+import class_decision_tree
+from class_missing_values import ImputationCat
+from class_traintest import OneHotEncoding
+from class_base import Base
+from pd_download import data_cleaning
+
+# -------------------------------------------------------------------Defined Variables-------------------------------------------------------
+
+file_path = "static/KGB.sas7bdat"
+data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+miss = ImputationCat(df_cat=df_loan_categorical)
+imputer_cat = miss.simple_imputer_mode()
+to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
+
+custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+
+instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
+#instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
+
+# x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
+# y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
+y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
+x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
+
+#pdb.set_trace()
+
+#pdb.set_trace()
+
+# Model Perfomance
+
+threshold = 0.47
+
+# d = class_decision_tree.BaseDecisonTree(custom_rcParams, imputer_cat, which, x_test, y_test,
+#                     df_loan_float, df_loan_float["GB"], threshold, randomstate, ccpalpha)
+
+# print(d.dt_classification_fit(ccpalpha = 0))
+
+# e = class_decision_tree.PrunedDecisionTree(custom_rcParams, imputer_cat, which, x_test, y_test,
+#                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
+
+with open('static/decision_tree.pkl','rb') as file:
+        loaded_model = pickle.load(file)
+
+# -------------------------------------------------------------------------------Views-----------------------------------------------------
 
 def confusion_decision(request):
 
@@ -35,12 +72,7 @@ def cross_validate(request):
 
 def tree(request):
 
-    global AGE, TITLE, list_1, answer
-    AGE = 8
-    TITLE = 6
-    list_=[]
-    answer=''
-
+    answer = ""
 
     if request.method == 'POST':
         form = In(request.POST)
@@ -214,33 +246,11 @@ def tree(request):
 
             list_ = inputs2 + inputs1
 
-            inputs = pd.Series(list_)  
-            
-            answer = Decision_tree.Predict_binary_DT(Decision_tree.DT_Classification_fit, inputs.values.reshape(1,-1), train_test1.Y_test\
-                         , train_test1.X_train, train_test1.Y_train, randomstate=42, ccpalpha=Decision_tree.ideal_ccp_alpha)    
-
-
-            #return redirect('deployment') 
+            inputs = np.array(list_).reshape(1,-1)            
+            answer = loaded_model.predict(inputs)  
 
     else:
         form = In()
         side_bar = Si()
 
-    return render(request, 'decision.html', {'form':form,'side_bar':side_bar,'answer':answer})
-
-
-# def Sides(request):
-
-#     if request.method == 'POST':
-#         side_bar = Side(request.POST)
-#         # if side_bar.is_valid():
-
-
-
-#     else:
-#         side_bar = Side()
-
-
-#     return render(request, 'side.html', {'side_bar':side_bar,'AGE':AGE,'TITLE':TITLE,'list_':list_,'answer':answer})
-
-
+    return render(request, 'decision.html', {'form':form, 'answer':answer})

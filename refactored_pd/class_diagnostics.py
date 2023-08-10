@@ -283,7 +283,7 @@ if __name__ == "__main__":
 
     custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-    instance = OneHotEncoding(custom_rcParams, imputer_cat, True)
+    instance = OneHotEncoding(custom_rcParams, imputer_cat, "statistics")
     #instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
     
     x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]

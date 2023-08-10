@@ -1,7 +1,7 @@
 
-import statsmodels.api as sm
 import pandas as pd
 import pickle
+from sklearn.tree import DecisionTreeClassifier
 
 from class_traintest import OneHotEncoding
 from class_base import Base
@@ -11,29 +11,15 @@ from class_missing_values import ImputationCat
 # -----------------------------------------------GLM BINOMIAL----------------------------------------------------
 
 
-def glm_binomial_fit(y_train, x_train):
+def decision_tree_fit(x_train, y_train, randomstate, ccpalpha):
     
     ''' GLM Binomial fit '''
 
-    try:
 
-        if y_train is list:
-
-            raise TypeError("target not an instance of a list") 
-
-    except TypeError as t:
-
-        print("Error:", t)
-
-
-    else:
+    clf_dt = DecisionTreeClassifier(random_state=randomstate, ccp_alpha=ccpalpha)
+    clf_dt = clf_dt.fit(x_train, y_train)
         
-        x_train = sm.add_constant(x_train.values)
-
-        glm_binom = sm.GLM(y_train, x_train, family=sm.families.Binomial())   
-        res = glm_binom.fit()
-
-        return res.summary(), res
+    return clf_dt
 
 # ----------------------------------------------Testing------------------------------------------------------------
 
@@ -48,21 +34,14 @@ if __name__ == "__main__":
     custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
 
-    instance = OneHotEncoding(custom_rcParams, imputer_cat, "statistics")
+    instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
     
     x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
     y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
     y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
     x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
 
-    x_test = sm.add_constant(x_test.values)
-    print(x_test)
-
-    y_train_shape = y_train.values.reshape(-1,1)
-    print(y_train_shape)
-
-    # model = (glm_binomial_fit(y_train_shape, x_train))[1]
+    a = decision_tree_fit(x_train, y_train, randomstate=42, ccpalpha=0)
     
-    # with open('glm_binomial.pkl','wb') as file:
-    #     pickle.dump(model, file)
-
+    with open('decision_tree.pkl','wb') as file:
+         pickle.dump(a, file)
