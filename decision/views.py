@@ -10,7 +10,7 @@ from .forms import In, Si
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-import class_decision_tree
+from class_decision_tree import DecisionTree
 from class_missing_values import ImputationCat
 from class_traintest import OneHotEncoding
 from class_base import Base
@@ -27,20 +27,22 @@ to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
 custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
 instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
-#instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
 
-# x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
-# y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
+x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
+y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
 y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
 x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
-
-#pdb.set_trace()
-
-#pdb.set_trace()
 
 # Model Perfomance
 
 threshold = 0.47
+randomstate = 42
+ccpalpha = 0
+threshold_1=0.0019
+threshold_2=0.0021
+
+d = DecisionTree(custom_rcParams, imputer_cat, "machine", y_test,
+                    df_loan_float, df_loan_float["GB"], threshold, randomstate)
 
 # d = class_decision_tree.BaseDecisonTree(custom_rcParams, imputer_cat, which, x_test, y_test,
 #                     df_loan_float, df_loan_float["GB"], threshold, randomstate, ccpalpha)
@@ -50,8 +52,8 @@ threshold = 0.47
 # e = class_decision_tree.PrunedDecisionTree(custom_rcParams, imputer_cat, which, x_test, y_test,
 #                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
 
-with open('static/decision_tree.pkl','rb') as file:
-        loaded_model = pickle.load(file)
+# with open('static/decision_tree.pkl','rb') as file:
+#         loaded_model = pickle.load(file)
 
 # -------------------------------------------------------------------------------Views-----------------------------------------------------
 
@@ -236,18 +238,25 @@ def tree(request):
 
 
 
-            inputs1 = [R, H, W, V, U, G, E, T,Radio_TV_Hifi, Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Owner, Lease\
-            ,Yugoslav, German, Turkish, RS, Greek ,Italian, Other_European, Spanish_Portugue,Others, Civil_Service_M ,State_Steel_Ind, Self_employed_pe\
-            , Food_Building_Ca, Chemical_Industr, Pensioner ,Sea_Vojage_Gast, Military_Service,Without_Vehicle, Car,Car_and_Motor_bi\
-            ,Cheque_card, no_credit_cards, Mastercard_Euroc, VISA_mybank,VISA_Others, Other_credit_car, American_Express]
+            # inputs1 = [H, R, E, G, T, U, V, W,Radio_TV_Hifi, Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Owner, Lease\
+            # ,Yugoslav, German, Turkish, RS, Greek ,Italian, Other_European, Spanish_Portugue,Others, Civil_Service_M ,State_Steel_Ind, Self_employed_pe\
+            # , Food_Building_Ca, Chemical_Industr, Pensioner ,Sea_Vojage_Gast, Military_Service,Without_Vehicle, Car,Car_and_Motor_bi\
+            # ,Cheque_card, no_credit_cards, Mastercard_Euroc, VISA_mybank,VISA_Others, Other_credit_car, American_Express]
+
+            inputs1 = [H, R, E, G, T, U, V, W, Cars, Dept_Store_Mail, Furniture_Carpet, Leisure, OT, Radio_TV_Hifi, Lease, Owner  
+            , German, Greek, Italian, Other_European, RS, Spanish_Portugue, Turkish, Yugoslav, Chemical_Industr,  Civil_Service_M 
+            , Food_Building_Ca, Military_Service, Others, Pensioner, Sea_Vojage_Gast, Self_employed_pe, State_Steel_Ind  
+            , Car, Car_and_Motor_bi, Without_Vehicle, American_Express, Cheque_card, Mastercard_Euroc, Other_credit_car, VISA_Others  
+            , VISA_mybank, no_credit_cards]
             
             inputs2 = [CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
             , REGN, DIV, CASH]    
 
             list_ = inputs2 + inputs1
 
-            inputs = np.array(list_).reshape(1,-1)            
-            answer = loaded_model.predict(inputs)  
+            inputs = np.array([list_]).reshape(1,-1)           
+            answer = d.dt_pruned_tree(0, inputs, x_test, y_test, ccpalpha, threshold_1, threshold_2)[2]  
+            print(answer)
 
     else:
         form = In()

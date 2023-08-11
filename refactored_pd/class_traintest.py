@@ -125,7 +125,8 @@ if __name__ == "__main__":
 
 
     file_path = "./KGB.sas7bdat"
-    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)
+    #print(df_loan_float)    
     miss = ImputationCat(df_cat=df_loan_categorical)
     imputer_cat = miss.simple_imputer_mode()
     #print(imputer_cat)
@@ -137,8 +138,8 @@ if __name__ == "__main__":
 
     instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
     # print(instance.df_cat)
-    c = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
-    print(c)
+    c = instance.onehot_encoding()
+    #print(c)
     #si = instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
     #plt.show()
 

@@ -39,7 +39,7 @@ class DecisionTree(OneHotEncoding):
 
     """ Fit a base tree """
 
-    def __init__(self, custom_rcParams, df_nomiss_cat, type_, x_test, y_test,
+    def __init__(self, custom_rcParams, df_nomiss_cat, type_, y_test,
                   df_loan_float, target, threshold, randomstate):
 
         super().__init__(custom_rcParams, df_nomiss_cat, type_)
@@ -60,26 +60,28 @@ class DecisionTree(OneHotEncoding):
         
         return clf_dt
 
-    def dt_probability_prediction(self, sample, x_test, ccpalpha):
+    def dt_probability_prediction(self, sample, x_test1, ccpalpha):
         
         ''' Base tree prediction '''
         
-        predict_dt = self.dt_classification_fit(ccpalpha).predict_proba(x_test).round(10)
+        predict_dt = self.dt_classification_fit(ccpalpha).predict_proba(x_test1).round(10)
 
         if predict_dt[sample][1] >= 0.47:
 
-            return print(f"Default with probability: {predict_dt[sample][1]}")
+            # return print(f"Default with probability: {predict_dt[sample][1]}")
+            return predict_dt[sample][1]
 
         else:
 
-            return print(f"NoDefault with probability: {predict_dt[sample][0]}")
+            # return print(f"NoDefault with probability: {predict_dt[sample][0]}")
+            return predict_dt[sample][1]
 
     def dt_confusion_matrix_plot(self, x_test, y_test, ccpalpha):
 
         """ Base tree Confusion matrix """
 
         predict_dt_series = pd.Series(self.dt_classification_fit(ccpalpha).predict(x_test))       
-        conf_matrix = confusion_matrix(y_test, predict_dt_series, labels = [0, 1])
+        conf_matrix = confusion_matrix(y_test, predict_dt_series)
 
         conf_matrix_plot = ConfusionMatrixDisplay(conf_matrix, display_labels = ["No Default", "Yes Default"])
         conf_matrix_plot.plot(cmap="Blues", ax=self.axs, values_format="d")       
@@ -95,7 +97,7 @@ class DecisionTree(OneHotEncoding):
 
         clf_dt = self.dt_classification_fit(ccpalpha)
         plot_tree(clf_dt, filled = True, rounded = True, 
-                  class_names = ["No Default", "Yes Default"], feature_names = self.x_train.columns.tolist(), ax = self.axs)   
+                   feature_names = self.x_train.columns.tolist(), ax = self.axs)   
 
         return self.fig
 
@@ -140,7 +142,7 @@ class DecisionTree(OneHotEncoding):
         
         return ideal_ccp_alpha[0]
 
-    def dt_pruned_tree(self, sample, x_test, y_test, ccpalpha, threshold_1, threshold_2):
+    def dt_pruned_tree(self, sample, x_test1, x_test, y_test, ccpalpha, threshold_1, threshold_2):
 
 
         """ Ideal alpha value for pruning the tree """
@@ -153,7 +155,7 @@ class DecisionTree(OneHotEncoding):
 
         """ Prediction and perfomance analytics """
 
-        pruned_predict_dt = self.dt_probability_prediction(sample, x_test, ideal_ccp_alpha)
+        pruned_predict_dt = self.dt_probability_prediction(sample, x_test1, ideal_ccp_alpha)
 
         """ Confusion matrix plot """
 
@@ -169,7 +171,7 @@ class DecisionTree(OneHotEncoding):
 
 #if "__name__" == "__main__":
 
-file_path = "KGB.sas7bdat"
+file_path = "static/KGB.sas7bdat"
 data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
 miss = ImputationCat(df_cat=df_loan_categorical)
 imputer_cat = miss.simple_imputer_mode()
@@ -190,7 +192,8 @@ ccpalpha = 0
 threshold_1=0.0019
 threshold_2=0.0021
 
-d = DecisionTree(custom_rcParams, imputer_cat, "machine", x_test, y_test,
-                    df_loan_float, df_loan_float["GB"], threshold, randomstate)
+# d = DecisionTree(custom_rcParams, imputer_cat, "machine", y_test,
+#                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
 
-f = d.dt_pruned_tree(0, x_test, y_test, ccpalpha, threshold_1, threshold_2)[2]
+# f = d.dt_pruned_tree(0, [x_test.reset_index(drop=True).iloc[0]], x_test, y_test, ccpalpha, threshold_1, threshold_2)[4]
+# plt.show()

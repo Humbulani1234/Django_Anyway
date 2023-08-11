@@ -44,6 +44,8 @@ x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])
 x_test = sm.add_constant(x_test.values)
 y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
 threshold = 0.47
+x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
+print(x_train.columns)
 
 b = class_diagnostics.ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
 c = ModelPerfomance(custom_rcParams, x_test, y_test, threshold)
@@ -264,12 +266,12 @@ def inputs(request):
             else:
                 Car,Car_and_Motor_bi= 0,0    
 
-            no_credit_cards, Mastercard_Euroc, VISA_mybank,VISA_Others\
+            Cheque_card, Mastercard_Euroc, VISA_mybank,VISA_Others\
             ,Other_credit_car, American_Express = 0,0,0,0,0,0  
 
             CARDS = form.cleaned_data.get("CARDS")  
 
-            if CARDS=='no_credit_cards':
+            if CARDS=='Cheque_card':
                 no_credit_cards=1
             elif CARDS=='Mastercard_Euroc':
                 Mastercard_Euroc=1
@@ -282,22 +284,26 @@ def inputs(request):
             elif CARDS=='American_Express':
                 American_Express=1
             else:
-                no_credit_cards, Mastercard_Euroc, VISA_mybank,VISA_Others\
+                Cheque_card, Mastercard_Euroc, VISA_mybank,VISA_Others\
                 ,Other_credit_car, American_Express = 0,0,0,0,0,0  
 
+            # inputs1 = [ H,V, U, G, E, T,Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Lease,German, Turkish, RS, Greek ,Italian
+            #           , Other_European, Spanish_Portugue,Others, Civil_Service_M , Self_employed_pe, Food_Building_Ca, Chemical_Industr
+            #           , Pensioner ,Sea_Vojage_Gast, Military_Service,Car,Car_and_Motor_bi,no_credit_cards, Mastercard_Euroc, VISA_mybank
+            #           , VISA_Others, Other_credit_car, American_Express ] 
 
-
-            inputs1 = [ H,V, U, G, E, T,Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Lease,German, Turkish, RS, Greek ,Italian
-                      , Other_European, Spanish_Portugue,Others, Civil_Service_M , Self_employed_pe, Food_Building_Ca, Chemical_Industr
-                      , Pensioner ,Sea_Vojage_Gast, Military_Service,Car,Car_and_Motor_bi,no_credit_cards, Mastercard_Euroc, VISA_mybank
-                      , VISA_Others, Other_credit_car, American_Express ] 
+            inputs1 = [H, E, G, T, U, V, Cars, Dept_Store_Mail, Furniture_Carpet, Leisure, OT, Lease, German, Greek, 
+            Italian, Other_European, RS, Spanish_Portugue, Turkish, Chemical_Industr, Civil_Service_M, 
+            Food_Building_Ca, Military_Service, Others, Pensioner, Sea_Vojage_Gast, Self_employed_pe, Car, 
+            Car_and_Motor_bi, American_Express, Cheque_card, Mastercard_Euroc, Other_credit_car, VISA_Others, VISA_mybank]
             
-            inputs2 = [ 1, CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
-             , REGN, DIV, CASH ]    
+            inputs2 = [ 1, CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, 
+                        LOCATION, LOANS, REGN, DIV, CASH ]    
 
             list_ = inputs2 + inputs1
             inputs = np.array(list_).reshape(1,-1)
-            answer = loaded_model.predict(inputs.reshape(1,-1)).round(10)  
+            answer = np.array(loaded_model.predict(inputs.reshape(1,-1)))
+            answer = "{: .10f}".format(answer[0])
 
     else:
 
