@@ -18,7 +18,8 @@ from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 
 import class_base
-
+import class_modelperf
+import class_traintest
 
 # --------------------------------------------------------------------Class EDA----------------------------------------------------
 
