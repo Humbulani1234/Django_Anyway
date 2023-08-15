@@ -17,6 +17,9 @@ from scipy.stats import chi2_contingency
 from sklearn.preprocessing import OrdinalEncoder
 import numpy as np
 
+import class_base
+import class_modelperf
+import class_traintest
 
 # --------------------------------------------------------------------Class EDA----------------------------------------------------
 
@@ -24,8 +27,6 @@ import numpy as np
 class EDA(Base):
 
 	def __init__(self):
-
-
 
 	def Point_Biserial_Test_Binary(independent, target):
 	    
