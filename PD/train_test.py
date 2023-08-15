@@ -50,7 +50,7 @@ def One_Hot_Encoding_Func_Stat(dataframe):
     return df_loan_categorical_encoded
 
 df_loan_categorical_encoded = One_Hot_Encoding_Func_Stat(missing_adhoc.df_loan_categorical_mode)
-#print(df_loan_categorical_encoded)
+print(df_loan_categorical_encoded)
 
 # ==================================
 # Machine Learning One Hot Encoding

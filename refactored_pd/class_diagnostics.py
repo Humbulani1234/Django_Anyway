@@ -48,12 +48,15 @@ class QuantileResiduals(ModelPerfomance):
         residuals = []
 
         try:
+
             if not isinstance(self.x_test, np.ndarray):
+
                 raise TypeError("must be an instance of a numpy-ndarray")
             
             self.predict_probability = super().probability_prediction()
 
             if self.y_test.shape[0] is None:
+
                 raise IndexError ("index empty")
 
             for i in range(self.y_test.shape[0]):
@@ -71,6 +74,7 @@ class QuantileResiduals(ModelPerfomance):
                         residuals.append(norm.ppf(u_2))
 
                 elif (self.threshold < 0 or self.threshold > 1):
+
                     raise ValueError("threshold outside bounds: [0-1]")
 
             quantile_residuals_series = pd.Series(residuals).round(2)
@@ -78,6 +82,7 @@ class QuantileResiduals(ModelPerfomance):
             return quantile_residuals_series
 
         except (TypeError, ValueError, IndexError) as e:
+
             print("Error:", e)
 
             return None
@@ -93,9 +98,11 @@ class ResidualsPlot(QuantileResiduals):
         self.fig, self.axs = plt.subplots(1,1)
 
         try:
+
             quantile_residuals_series = super().quantile_residuals()
 
             if quantile_residuals_series is None:
+
                 raise ValueError ("residuals empty")
 
             self.axs.plot(quantile_residuals_series.index, quantile_residuals_series.values)
@@ -104,6 +111,7 @@ class ResidualsPlot(QuantileResiduals):
             return self.fig
         
         except ValueError as v:
+
             print("Error:", v)
 
             return None
@@ -129,6 +137,7 @@ class BreushPaganTest(QuantileResiduals):
             return self.test
         
         except ValueError as v:
+
             print("Error:", v)
 
             return None
@@ -136,12 +145,6 @@ class BreushPaganTest(QuantileResiduals):
 # ------------------------------------------------------Normality Test-----------------------------------------------
 
 class NormalityTest(QuantileResiduals):
-
-    # def __init__(self, func, x_test, y_test, x_train, y_train, threshold,custom_rcParams: dict) -> None:
-
-    #     super().__init__(func, x_test, y_test, x_train, y_train, threshold)
-    #     self.custom_rcParams = plt.rcParams.update(custom_rcParams)
-    #     self.fig, self.axs = plt.subplots(1,1)
 
     def normality_test_quantile(self):
 
@@ -152,13 +155,11 @@ class NormalityTest(QuantileResiduals):
 
         return self.normal_test
 
-
     def plot_normality_quantile(self):
 
        """ normality plot"""
 
        self.fig, self.axs = plt.subplots(1,1)
-
        quantile_residuals_series = super().quantile_residuals()
        self.qqplot = stats.probplot(quantile_residuals_series, dist="norm")
        self.axs.plot(self.qqplot[0][0],self.qqplot[0][1], marker='o', linestyle='none')
@@ -183,19 +184,11 @@ class DurbinWatsonTest(QuantileResiduals):
 
 class PartialPlots(QuantileResiduals):
 
-    # def __init__(self, func, x_test, y_test, x_train, y_train, threshold,custom_rcParams: dict) -> None:
-
-    #     super().__init__(func, x_test, y_test, x_train, y_train, threshold)
-    #     self.custom_rcParams = plt.rcParams.update(custom_rcParams)
-    #     self.fig, self.axs = plt.subplots(1,1)
-
-
     def partial_plots_quantile(self, ind_var):
 
        """ Partial Plots - Residuals vs Features """
 
        self.fig, self.axs = plt.subplots(1,1)
-
        quantile_residuals_series = super().quantile_residuals()
        self.xlabel_name = ind_var.name
        self.axs.scatter(ind_var, quantile_residuals_series)
@@ -205,22 +198,13 @@ class PartialPlots(QuantileResiduals):
 
 # -------------------------------------------------Leverage Studentised Residuals-----------------------------------------
 
-
 class LevStudQuaRes(QuantileResiduals):
-
-    # def __init__(self, func, x_test, y_test, x_train, y_train, threshold,custom_rcParams: dict) -> None:
-
-    #     super().__init__(func, x_test, y_test, x_train, y_train, threshold)
-    #     self.custom_rcParams = plt.rcParams.update(custom_rcParams)
-    #     self.fig, self.axs = plt.subplots(1,1)
-
 
     def plot_lev_stud_quantile(self):
 
        """ Outliers and Influence """
 
        self.fig, self.axs = plt.subplots(1,1)
-
        res = self.function(self.x_train, self.y_train)[1]
        quantile_residuals_series = super().quantile_residuals()
        hat_matrix = np.round(res.get_hat_matrix_diag(),2)
@@ -239,19 +223,11 @@ class LevStudQuaRes(QuantileResiduals):
 
 class CooksDisQuantRes(QuantileResiduals):
 
-    # def __init__(self, func, x_test, y_test, x_train, y_train, threshold,custom_rcParams: dict) -> None:
-
-    #     super().__init__(func, x_test, y_test, x_train, y_train, threshold)
-    #     self.custom_rcParams = plt.rcParams.update(custom_rcParams)
-    #     self.fig, self.axs = plt.subplots(1,1)
-
-
     def plot_cooks_dis_quantile(self):
 
         """ Cooks Distance Plot """
 
         self.fig, self.axs = plt.subplots(1,1)
-
         res = self.function(self.x_train, self.y_train)[1]
         quantile_residuals_series = super().quantile_residuals()
         hat_matrix = np.round(res.get_hat_matrix_diag(),2)
@@ -268,59 +244,59 @@ class CooksDisQuantRes(QuantileResiduals):
 
 # -----------------------------------------------Testing-------------------------------------------
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    file_path = "./KGB.sas7bdat"
-    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
-    miss = ImputationCat(df_cat=df_loan_categorical)
-    imputer_cat = miss.simple_imputer_mode()
-    #print(imputer_cat)
-    to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
+#     file_path = "./KGB.sas7bdat"
+#     data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+#     miss = ImputationCat(df_cat=df_loan_categorical)
+#     imputer_cat = miss.simple_imputer_mode()
+#     #print(imputer_cat)
+#     to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
 
-    #print(to_use)
+#     #print(to_use)
 
-    # custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+#     # custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-    custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+#     custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-    instance = OneHotEncoding(custom_rcParams, imputer_cat, True)
-    #instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
+#     instance = OneHotEncoding(custom_rcParams, imputer_cat, "statistics")
+#     #instance.sample_imbalance(df_loan_float, df_loan_float["GB"])
     
-    x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
-    y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
-    y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
-    x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
+#     x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
+#     y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
+#     y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
+#     x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
 
-    #pdb.set_trace()
+#     #pdb.set_trace()
 
-    x_test = sm.add_constant(x_test.values)
+#     x_test = sm.add_constant(x_test.values)
  
-    #pdb.set_trace()
+#     #pdb.set_trace()
 
-    y_train_shape = y_train.values.reshape(-1,1)
+#     y_train_shape = y_train.values.reshape(-1,1)
 
-    #pdb.set_trace()
+#     #pdb.set_trace()
 
-    m = (glm_binomial_fit(y_train_shape, x_train))[1]
+#     m = (glm_binomial_fit(y_train_shape, x_train))[1]
 
-    a = m.predict(x_test).round(10)
+#     a = m.predict(x_test).round(10)
 
-    # Model Perfomance
+#     # Model Perfomance
     
-    threshold = 0.47
-    func = glm_binomial_fit
+#     threshold = 0.47
+#     func = glm_binomial_fit
 
-    p = ModelPerfomance(custom_rcParams, x_test, y_test, threshold)
-    #c = p.confusion_matrix_plot()
-    #r = p.confusion_matrix_plot()
-    #plt.show()
+#     p = ModelPerfomance(custom_rcParams, x_test, y_test, threshold)
+#     #c = p.confusion_matrix_plot()
+#     #r = p.confusion_matrix_plot()
+#     #plt.show()
 
-    # Diagnostics
+#     # Diagnostics
     
-    # a = QuantileResiduals(custom_rcParams, func, x_test, y_test, x_train, y_train, threshold)
-    # b = a.quantile_residuals()
-    # print(r)
+#     # a = QuantileResiduals(custom_rcParams, func, x_test, y_test, x_train, y_train, threshold)
+#     # b = a.quantile_residuals()
+#     # print(r)
 
-    b = ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
-    c = b.plot_quantile_residuals()
-    plt.show()
+#     b = ResidualsPlot(custom_rcParams, x_test, y_test, threshold)
+#     c = b.plot_quantile_residuals()
+#     plt.show()

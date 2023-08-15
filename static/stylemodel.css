@@ -26,13 +26,13 @@
   padding: 20px;
             }
 
-.contained {
+/*.contained {
 
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 10px rgba(0.8, 0.6, 0.4, 1);
-/*  perspective: 800px;*/
+  perspective: 800px;
   background-color: white;
   border:0.1px white;
   margin-bottom: 50px;
@@ -41,7 +41,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
   
-         }
+         }*/
 
  .containedD {
   display: flex;
