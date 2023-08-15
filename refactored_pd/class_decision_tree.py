@@ -43,7 +43,7 @@ class DecisionTree(OneHotEncoding):
                   df_loan_float, target, threshold, randomstate):
 
         super().__init__(custom_rcParams, df_nomiss_cat, type_)
-
+        
         self.fig, self.axs = plt.subplots(1,1)  
         self.df_loan_float = df_loan_float
         self.target = target
@@ -68,12 +68,10 @@ class DecisionTree(OneHotEncoding):
 
         if predict_dt[sample][1] >= 0.47:
 
-            # return print(f"Default with probability: {predict_dt[sample][1]}")
             return predict_dt[sample][1]
 
         else:
 
-            # return print(f"NoDefault with probability: {predict_dt[sample][0]}")
             return predict_dt[sample][1]
 
     def dt_confusion_matrix_plot(self, x_test, y_test, ccpalpha):
@@ -82,7 +80,6 @@ class DecisionTree(OneHotEncoding):
 
         predict_dt_series = pd.Series(self.dt_classification_fit(ccpalpha).predict(x_test))       
         conf_matrix = confusion_matrix(y_test, predict_dt_series)
-
         conf_matrix_plot = ConfusionMatrixDisplay(conf_matrix, display_labels = ["No Default", "Yes Default"])
         conf_matrix_plot.plot(cmap="Blues", ax=self.axs, values_format="d")       
         conf_matrix_plot.ax_.set_title("Confusion Matrix", fontsize=15, pad=18)
@@ -116,8 +113,7 @@ class DecisionTree(OneHotEncoding):
         
         """ Cross validation for best alpha """
 
-        alpha_loop_values = []
-        
+        alpha_loop_values = []        
         ccp_alphas = self.pruning(ccpalpha)
 
         for ccp_alpha in ccp_alphas:
@@ -135,8 +131,7 @@ class DecisionTree(OneHotEncoding):
         
         """ Extraction of ideal alpha """
 
-        alpha_results = self.cross_validate_alphas(ccpalpha)[0]
-        
+        alpha_results = self.cross_validate_alphas(ccpalpha)[0]       
         ideal_ccp_alpha = alpha_results[(alpha_results["alpha"] > threshold_1) & (alpha_results["alpha"] < threshold_2)]["alpha"]
         ideal_ccp_alpha = ideal_ccp_alpha.values.tolist()
         
@@ -169,31 +164,31 @@ class DecisionTree(OneHotEncoding):
 
 # --------------------------------------------------------Testing--------------------------------------------------------------------------------
 
-#if "__name__" == "__main__":
+if __name__ == "__main__":
 
-file_path = "static/KGB.sas7bdat"
-data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
-miss = ImputationCat(df_cat=df_loan_categorical)
-imputer_cat = miss.simple_imputer_mode()
-to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
+    file_path = "static/KGB.sas7bdat"
+    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
+    miss = ImputationCat(df_cat=df_loan_categorical)
+    imputer_cat = miss.simple_imputer_mode()
+    to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
 
-custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+    custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
+    instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
 
-x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
-y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
-y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
-x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
+    x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
+    y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
+    y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
+    x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
 
-threshold = 0.47
-randomstate = 42
-ccpalpha = 0
-threshold_1=0.0019
-threshold_2=0.0021
+    threshold = 0.47
+    randomstate = 42
+    ccpalpha = 0
+    threshold_1=0.0019
+    threshold_2=0.0021
 
-# d = DecisionTree(custom_rcParams, imputer_cat, "machine", y_test,
-#                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
+    # d = DecisionTree(custom_rcParams, imputer_cat, "machine", y_test,
+    #                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
 
-# f = d.dt_pruned_tree(0, [x_test.reset_index(drop=True).iloc[0]], x_test, y_test, ccpalpha, threshold_1, threshold_2)[4]
-# plt.show()
+    # f = d.dt_pruned_tree(0, [x_test.reset_index(drop=True).iloc[0]], x_test, y_test, ccpalpha, threshold_1, threshold_2)[4]
+    # plt.show()

@@ -42,7 +42,6 @@ class OneHotEncoding(Base):
     def __init__(self, custom_rcParams, df_nomiss_cat, type_):
 
         super().__init__(custom_rcParams)
-
         self.df_nomiss_cat = df_nomiss_cat
         self.type = type_
 
@@ -120,9 +119,7 @@ class OneHotEncoding(Base):
 
 # ---------------------------------------------------------Testing-------------------------------------------------------
 
-
 if __name__ == "__main__":
-
 
     file_path = "./KGB.sas7bdat"
     data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)

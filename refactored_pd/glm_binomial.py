@@ -9,6 +9,8 @@ from pd_download import data_cleaning
 from class_missing_values import ImputationCat
 import warnings
 
+#------------------------------------------------------Settings------------------------------------------------------
+
 pd.set_option("display.width", 1100)
 pd.set_option("display.max_columns", 1000)
 pd.set_option("display.max_rows", 1000)
@@ -36,7 +38,6 @@ def glm_binomial_fit(y_train, x_train):
     else:
         
         x_train = sm.add_constant(x_train.values)
-
         glm_binom = sm.GLM(y_train, x_train, family=sm.families.Binomial())   
         res = glm_binom.fit()
 

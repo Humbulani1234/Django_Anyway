@@ -73,11 +73,11 @@ class ImputationCat:
     
 # -----------------------------------------------------------Testing-----------------------------------------------------------
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
     
-#     file_path = "./KGB.sas7bdat"
-#     data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)
-#     miss = ImputationCat(df_loan_categorical)
-#     #miss.concatenate_total_df(dataframefloat, dataframecategorical) 
-#     y = miss.simple_imputer_mode()
-#     #print(y)
+    file_path = "./KGB.sas7bdat"
+    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)
+    miss = ImputationCat(df_loan_categorical)
+    #miss.concatenate_total_df(dataframefloat, dataframecategorical) 
+    y = miss.simple_imputer_mode()
+    #print(y)
