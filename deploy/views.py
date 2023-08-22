@@ -277,5 +277,3 @@ def inputs(request):
         side_bar = Side()
 
     return render(request, 'features.html', {'form':form, 'answer':answer})
-
-# ------------------------------------------------------------------Consider----------------------------------------------------------
