@@ -68,9 +68,5 @@ class ImputationCat:
          into one total dataframe for further analysis """
 
         df_total_no_missing = pd.concat([dataframefloat, dataframecategorical], axis = 1)
-
-<<<<<<< HEAD
+        
         return df_total_no_missing
-=======
-        return df_total_no_missing
->>>>>>> main
