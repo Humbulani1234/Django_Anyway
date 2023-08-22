@@ -57,5 +57,10 @@ if __name__ == "__main__":
     x_test = sm.add_constant(x_test.values)
 
     y_train_shape = y_train.values.reshape(-1,1)
+<<<<<<< HEAD
+
+    model = (glm_binomial_fit(y_train_shape, x_train))[1]
+=======
+>>>>>>> main
 
     model = (glm_binomial_fit(y_train_shape, x_train))[1]

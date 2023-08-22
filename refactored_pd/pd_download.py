@@ -5,7 +5,6 @@ import warnings
 
 # ---------------------------------------------------Data Downloading----------------------------------------------------------s
 
-
 def data_download_sas(file_path):
     
     ''' Data Download function '''
@@ -38,4 +37,8 @@ def data_cleaning(file_path):
     df_cat['PRODUCT'] = df_cat['PRODUCT'].replace('Others','OT')
     df_cat['NAT'] = df_cat['NAT'].replace('Others','RS')
 
+<<<<<<< HEAD
     return data_types, df_cat, df_float
+=======
+    return data_types, df_cat, df_float
+>>>>>>> main

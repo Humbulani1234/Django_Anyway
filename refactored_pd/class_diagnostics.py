@@ -31,6 +31,7 @@ from scipy.stats import probplot, normaltest
 from math import sqrt
 import statsmodels.api as sm
 import pickle
+import statsmodels.stats.diagnostic as sd
 
 from class_modelperf import ModelPerfomance
 from class_traintest import OneHotEncoding
@@ -40,6 +41,9 @@ from class_missing_values import ImputationCat
 from glm_binomial import glm_binomial_fit
 
 # ----------------------------------------------------Base Class-----------------------------------------------------------
+
+with open('static/glm_binomial.pkl','rb') as file:
+        loaded_model = pickle.load(file)
 
 class QuantileResiduals(ModelPerfomance):
 
@@ -192,7 +196,7 @@ class PartialPlots(QuantileResiduals):
        quantile_residuals_series = super().quantile_residuals()
        self.xlabel_name = ind_var.name
        self.axs.scatter(ind_var, quantile_residuals_series)
-       super()._plotting("Partial Plot", self.xlabel_name, "y")
+       super().plotting("Partial Plot", self.xlabel_name, "Residuals")
         
        return self.fig
 
@@ -205,9 +209,8 @@ class LevStudQuaRes(QuantileResiduals):
        """ Outliers and Influence """
 
        self.fig, self.axs = plt.subplots(1,1)
-       res = self.function(self.x_train, self.y_train)[1]
        quantile_residuals_series = super().quantile_residuals()
-       hat_matrix = np.round(res.get_hat_matrix_diag(),2)
+       hat_matrix = np.round(loaded_model.get_hat_matrix_diag(),2)
        self.lev_stud_res = []
 
        for i in range(len(quantile_residuals_series)):
@@ -215,7 +218,7 @@ class LevStudQuaRes(QuantileResiduals):
         self.lev_stud_res.append(quantile_residuals_series[i]/(sqrt(1-hat_matrix[i])))
 
        self.axs.plot(pd.Series(self.lev_stud_res).index, pd.Series(self.lev_stud_res).values)
-       super()._plotting("Leverage Studentised Residuals", "x", "y")
+       super().plotting("Leverage Studentised Residuals", "x", "y")
         
        return self.fig
 
@@ -228,9 +231,8 @@ class CooksDisQuantRes(QuantileResiduals):
         """ Cooks Distance Plot """
 
         self.fig, self.axs = plt.subplots(1,1)
-        res = self.function(self.x_train, self.y_train)[1]
         quantile_residuals_series = super().quantile_residuals()
-        hat_matrix = np.round(res.get_hat_matrix_diag(),2)
+        hat_matrix = np.round(loaded_model.get_hat_matrix_diag(),2)
         self.d = []
 
         for i in range(len(quantile_residuals_series)):
@@ -238,6 +240,6 @@ class CooksDisQuantRes(QuantileResiduals):
             self.d.append((quantile_residuals_series[i]**2/3000)*(hat_matrix[i]/(1-hat_matrix[i])))
 
         self.axs.plot(pd.Series(self.d).index, pd.Series(self.d).values)
-        super()._plotting("Leverage Studentised Residuals", "x", "y")
+        super().plotting("Cooks Distance", "x", "y")
 
         return self.fig

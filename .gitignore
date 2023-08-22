@@ -3,3 +3,11 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+PD
+startup.sh
+package.json
+package-lock.json
+nixpacks.toml
+myproject_uwsgi.ini
+Dockerfile
+
