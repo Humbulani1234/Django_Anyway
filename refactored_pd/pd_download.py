@@ -3,14 +3,6 @@
 import pandas as pd
 import warnings
 
-# -------------------------------------------------Settings--------------------------------------------------------------------
-
-pd.set_option("display.width", 30000)
-pd.set_option("display.max_columns", 30000)
-pd.set_option("display.max_rows", 30000)
-pd.set_option("display.float_format", lambda x: "%.0f" %x)
-warnings.filterwarnings("ignore")
-
 # ---------------------------------------------------Data Downloading----------------------------------------------------------s
 
 
