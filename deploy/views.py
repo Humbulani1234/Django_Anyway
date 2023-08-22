@@ -19,7 +19,7 @@ sys.path.append('/home/humbulani/New/django_project/refactored_pd')
 
 import data
 
-#-------------------------------------------------------------------Defined variables-----------------------------------------------------------
+#-------------------------------------------------------------------Defined variables----------------------------------------------------
 
 def image_generator(f):
 
@@ -31,7 +31,7 @@ def image_generator(f):
 
     return image_base64
 
-#------------------------------------------------------------------ Performance measures---------------------------------------------------------
+#------------------------------------------------------------------ Performance measures-------------------------------------------------
 
 def roc(request):
 
@@ -47,11 +47,11 @@ def confusion_logistic(request):
 
     return render (request, 'confusion_logistic.html', {'image_base64':image_base64})
 
-#-------------------------------------------------------------------Model Diagnostics------------------------------------------------------------
+#-------------------------------------------------------------------Model Diagnostics-----------------------------------------------------
 
 def normal_plot(request):
 
-    f = data.b.plot_normality_quantile()
+    f = data.k.plot_normality_quantile()
     image_base64 = image_generator(f)
 
     return render (request, 'normal_plot.html', {'image_base64':image_base64})
@@ -65,26 +65,26 @@ def residuals(request):
 
 def partial(request):
 
-    f = data.b.partial_plots_quantile()
+    f = data.h.partial_plots_quantile(data.ind_var)
     image_base64 = image_generator(f)
 
     return render (request, 'partial.html', {'image_base64':image_base64})
 
 def student(request):
 
-    f = data.b.plot_lev_stud_quantile()
+    f = data.i.plot_lev_stud_quantile()
     image_base64 = image_generator(f)
 
     return render (request, 'student.html', {'image_base64':image_base64})
 
 def cooks(request):
 
-    f = data.b.plot_cooks_dis_quantile()
+    f = data.j.plot_cooks_dis_quantile()
     image_base64 = image_generator(f)
 
     return render (request, 'cooks.html', {'image_base64':image_base64})
 
-#-------------------------------------------------------------------Home and Models------------------------------------------------------------------
+#-------------------------------------------------------------------Home and Models-----------------------------------------------------
 
 def home(request):
 
@@ -122,8 +122,7 @@ def inputs(request):
             REGN = form.cleaned_data.get("REGN")
             DIV = form.cleaned_data.get("DIV")
             CASH = form.cleaned_data.get("CASH")
-            
-            
+                        
             # Categorical features
             
             TITLE = form.cleaned_data.get("TITLE")
@@ -277,5 +276,3 @@ def inputs(request):
         side_bar = Side()
 
     return render(request, 'features.html', {'form':form, 'answer':answer})
-
-# ------------------------------------------------------------------Consider----------------------------------------------------------

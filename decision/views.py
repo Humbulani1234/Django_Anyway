@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import pickle
 import sys
+import io
+import base64
 
 sys.path.append('/home/humbulani/New/django_project/refactored_pd')
 
@@ -15,62 +17,44 @@ from class_missing_values import ImputationCat
 from class_traintest import OneHotEncoding
 from class_base import Base
 from pd_download import data_cleaning
+import data
 
-# -------------------------------------------------------------------Defined Variables-------------------------------------------------------
+# -------------------------------------------------------------------Defined Variables--------------------------------------------
 
-file_path = "static/KGB.sas7bdat"
-data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
-miss = ImputationCat(df_cat=df_loan_categorical)
-imputer_cat = miss.simple_imputer_mode()
-to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
+def image_generator(f):
 
-custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
+    buffer = io.BytesIO()
+    f.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode()
+    buffer.close()
 
-instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
+    return image_base64
 
-x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
-y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
-y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
-x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
-
-# Model Perfomance
-
-threshold = 0.47
-randomstate = 42
-ccpalpha = 0
-threshold_1=0.0019
-threshold_2=0.0021
-
-d = DecisionTree(custom_rcParams, imputer_cat, "machine", y_test,
-                    df_loan_float, df_loan_float["GB"], threshold, randomstate)
-
-# d = class_decision_tree.BaseDecisonTree(custom_rcParams, imputer_cat, which, x_test, y_test,
-#                     df_loan_float, df_loan_float["GB"], threshold, randomstate, ccpalpha)
-
-# print(d.dt_classification_fit(ccpalpha = 0))
-
-# e = class_decision_tree.PrunedDecisionTree(custom_rcParams, imputer_cat, which, x_test, y_test,
-#                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
-
-# with open('static/decision_tree.pkl','rb') as file:
-#         loaded_model = pickle.load(file)
-
-# -------------------------------------------------------------------------------Views-----------------------------------------------------
+# ---------------------------------------------------------------------Views---------------------------------------------
 
 def confusion_decision(request):
 
-     return render (request, 'confusion_decision.html')
+    f = data.d.dt_pruned_confmatrix(data.ccpalpha, data.threshold_1, data.threshold_2,
+                                    data.x_test_orig, data.y_test_orig)
+    image_base64 = image_generator(f)                 
 
+    return render (request, 'confusion_decision.html', {'image_base64':image_base64})
 
 def decision_tree(request):
 
-     return render (request, 'decision_tree.html')
+    f = data.d.dt_pruned_tree(data.ccpalpha, data.threshold_1, data.threshold_2)
+    image_base64 = image_generator(f)  
+
+    return render (request, 'decision_tree.html', {'image_base64':image_base64}) 
 
 
 def cross_validate(request):
 
-     return render (request, 'cross_validate.html')
+    f = data.d.cross_validate_alphas(data.ccpalpha)[1]
+    image_base64 = image_generator(f)   
 
+    return render (request, 'cross_validate.html', {'image_base64':image_base64})
 
 def tree(request):
 
@@ -102,20 +86,18 @@ def tree(request):
             REGN = form.cleaned_data.get("REGN")
             DIV = form.cleaned_data.get("DIV")
             CASH = form.cleaned_data.get("CASH")
-            
-    	    
+                	    
     	    # Categorical features
-    	    # 
+    	    
             TITLE = form.cleaned_data.get("TITLE")
             R,H = 0,0
+
             if TITLE == 'H':
     	        H=1
-    	        # list_.append(H)
+
             else:
     	        R=0
-    	        # list_.append(H)
-            #input_ = [H]
-            #
+    	   
             STATUS = form.cleaned_data.get("STATUS")
 
             W,V, U, G, E, T = 0,0,0,0,0,0    
@@ -236,27 +218,20 @@ def tree(request):
             else:
                 Cheque_card = 1  
 
-
-
-            # inputs1 = [H, R, E, G, T, U, V, W,Radio_TV_Hifi, Furniture_Carpet, Dept_Store_Mail, Leisure,Cars, OT,Owner, Lease\
-            # ,Yugoslav, German, Turkish, RS, Greek ,Italian, Other_European, Spanish_Portugue,Others, Civil_Service_M ,State_Steel_Ind, Self_employed_pe\
-            # , Food_Building_Ca, Chemical_Industr, Pensioner ,Sea_Vojage_Gast, Military_Service,Without_Vehicle, Car,Car_and_Motor_bi\
-            # ,Cheque_card, no_credit_cards, Mastercard_Euroc, VISA_mybank,VISA_Others, Other_credit_car, American_Express]
-
-            inputs1 = [H, R, E, G, T, U, V, W, Cars, Dept_Store_Mail, Furniture_Carpet, Leisure, OT, Radio_TV_Hifi, Lease, Owner  
-            , German, Greek, Italian, Other_European, RS, Spanish_Portugue, Turkish, Yugoslav, Chemical_Industr,  Civil_Service_M 
-            , Food_Building_Ca, Military_Service, Others, Pensioner, Sea_Vojage_Gast, Self_employed_pe, State_Steel_Ind  
-            , Car, Car_and_Motor_bi, Without_Vehicle, American_Express, Cheque_card, Mastercard_Euroc, Other_credit_car, VISA_Others  
-            , VISA_mybank, no_credit_cards]
+            inputs1 = [H, R, E, G, T, U, V, W, Cars, Dept_Store_Mail, Furniture_Carpet, Leisure, OT, Radio_TV_Hifi, Lease, Owner,  
+                      German, Greek, Italian, Other_European, RS, Spanish_Portugue, Turkish, Yugoslav, Chemical_Industr,
+                      Civil_Service_M, Food_Building_Ca, Military_Service, Others, Pensioner, Sea_Vojage_Gast, Self_employed_pe,
+                      State_Steel_Ind, Car, Car_and_Motor_bi, Without_Vehicle, American_Express, Cheque_card, Mastercard_Euroc,
+                      Other_credit_car, VISA_Others, VISA_mybank, no_credit_cards]
             
-            inputs2 = [CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS\
-            , REGN, DIV, CASH]    
+            inputs2 = [CHILDREN, PERS_H, AGE, TMADD, TMJOB1, TEL, NMBLOAN, FINLOAN, INCOME, EC_CARD, INC, INC1, BUREAU, LOCATION, LOANS,
+                       REGN, DIV, CASH]    
 
             list_ = inputs2 + inputs1
 
             inputs = np.array([list_]).reshape(1,-1)           
-            answer = d.dt_pruned_tree(0, inputs, x_test, y_test, ccpalpha, threshold_1, threshold_2)[2]  
-            print(answer)
+            answer = data.d.dt_pruned_prediction(data.ccpalpha, data.threshold_1, data.threshold_2,
+                                                        data.sample, inputs)
 
     else:
         form = In()

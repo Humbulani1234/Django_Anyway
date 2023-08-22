@@ -124,6 +124,8 @@ class DecisionTree(OneHotEncoding):
         
         alpha_results = pd.DataFrame(alpha_loop_values, columns=["alpha", "mean_accuracy", "std"])
         alpha_results.plot(ax = self.axs, x = "alpha", y = "mean_accuracy", yerr = "std", marker = "o" , linestyle = "--")
+        self.axs.spines["top"].set_visible(False)  
+        self.axs.spines["right"].set_visible(False) 
         
         return alpha_results, self.fig
 
@@ -137,58 +139,47 @@ class DecisionTree(OneHotEncoding):
         
         return ideal_ccp_alpha[0]
 
-    def dt_pruned_tree(self, sample, x_test1, x_test, y_test, ccpalpha, threshold_1, threshold_2):
-
+    def dt_pruned_alpha(self, ccpalpha, threshold_1, threshold_2):
 
         """ Ideal alpha value for pruning the tree """
 
         ideal_ccp_alpha = self.ideal_alpha(ccpalpha, threshold_1, threshold_2)
 
+        return ideal_ccp_alpha
+
+    def dt_pruned_fit(self, ccpalpha, threshold_1, threshold_2):
+
         """ Pruned tree fitting """
 
-        pruned_clf_dt = self.dt_classification_fit(ideal_ccp_alpha)
+        ideal_ccp_alpha = self.dt_pruned_alpha(ccpalpha, threshold_1, threshold_2)
+        pruned_clf_dt = self.ideal_alpha(ideal_ccp_alpha)
+
+        return pruned_clf_dt
+
+    def dt_pruned_prediction(self, ccpalpha, threshold_1, threshold_2, sample, x_test1):
 
         """ Prediction and perfomance analytics """
 
+        ideal_ccp_alpha = self.dt_pruned_alpha(ccpalpha, threshold_1, threshold_2)
         pruned_predict_dt = self.dt_probability_prediction(sample, x_test1, ideal_ccp_alpha)
+
+        return pruned_predict_dt
+
+    def dt_pruned_confmatrix(self, ccpalpha, threshold_1, threshold_2, x_test, y_test):
 
         """ Confusion matrix plot """
 
+        ideal_ccp_alpha = self.dt_pruned_alpha(ccpalpha, threshold_1, threshold_2)
         pruned_confusion_matrix = self.dt_confusion_matrix_plot(x_test, y_test, ideal_ccp_alpha)
+
+        return pruned_confusion_matrix
+
+
+    def dt_pruned_tree(self, ccpalpha, threshold_1, threshold_2):
 
         """ Plot final tree """
 
+        ideal_ccp_alpha = self.dt_pruned_alpha(ccpalpha, threshold_1, threshold_2)
         pruned_plot_tree = self.plot_dt(ideal_ccp_alpha)
 
-        return ideal_ccp_alpha, pruned_clf_dt, pruned_predict_dt, pruned_confusion_matrix, pruned_plot_tree  
-
-# --------------------------------------------------------Testing--------------------------------------------------------------------------------
-
-if __name__ == "__main__":
-
-    file_path = "static/KGB.sas7bdat"
-    data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)    
-    miss = ImputationCat(df_cat=df_loan_categorical)
-    imputer_cat = miss.simple_imputer_mode()
-    to_view = miss.concatenate_total_df(df_loan_float, imputer_cat)
-
-    custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
-
-    instance = OneHotEncoding(custom_rcParams, imputer_cat, "machine")
-
-    x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
-    y_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[2]
-    y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
-    x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
-
-    threshold = 0.47
-    randomstate = 42
-    ccpalpha = 0
-    threshold_1=0.0019
-    threshold_2=0.0021
-
-    # d = DecisionTree(custom_rcParams, imputer_cat, "machine", y_test,
-    #                     df_loan_float, df_loan_float["GB"], threshold, randomstate)
-
-    # f = d.dt_pruned_tree(0, [x_test.reset_index(drop=True).iloc[0]], x_test, y_test, ccpalpha, threshold_1, threshold_2)[4]
-    # plt.show()
+        return pruned_plot_tree  
