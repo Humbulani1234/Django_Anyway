@@ -12,7 +12,6 @@ class Base():
     def __init__(self, custom_rcParams):
 
         self.custom_rcParams = plt.rcParams.update(custom_rcParams)
-        #self.fig, self.axs = plt.
 
     def plotting(self, title_, xlabel_, ylabel_):
         
@@ -20,7 +19,6 @@ class Base():
 
         self.axs.set_title(title_)
         self.axs.set_xlabel(xlabel_)
-        #self.axs[0].set_xticks(fontsize=12)
         self.axs.set_ylabel(ylabel_)
         self.axs.spines["top"].set_visible(False)  
         self.axs.spines["right"].set_visible(False) 

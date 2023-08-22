@@ -182,4 +182,8 @@ class DecisionTree(OneHotEncoding):
         ideal_ccp_alpha = self.dt_pruned_alpha(ccpalpha, threshold_1, threshold_2)
         pruned_plot_tree = self.plot_dt(ideal_ccp_alpha)
 
+<<<<<<< HEAD
         return pruned_plot_tree  
+=======
+        return ideal_ccp_alpha, pruned_clf_dt, pruned_predict_dt, pruned_confusion_matrix, pruned_plot_tree  
+>>>>>>> main

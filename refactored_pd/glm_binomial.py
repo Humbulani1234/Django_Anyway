@@ -9,14 +9,6 @@ from pd_download import data_cleaning
 from class_missing_values import ImputationCat
 import warnings
 
-#------------------------------------------------------Settings------------------------------------------------------
-
-pd.set_option("display.width", 1100)
-pd.set_option("display.max_columns", 1000)
-pd.set_option("display.max_rows", 1000)
-pd.set_option("display.float_format", lambda x: "%.0f" %x)
-warnings.filterwarnings("ignore")
-
 # -----------------------------------------------GLM BINOMIAL----------------------------------------------------
 
 
@@ -65,6 +57,10 @@ if __name__ == "__main__":
     x_test = sm.add_constant(x_test.values)
 
     y_train_shape = y_train.values.reshape(-1,1)
+<<<<<<< HEAD
 
     model = (glm_binomial_fit(y_train_shape, x_train))[1]
+=======
+>>>>>>> main
 
+    model = (glm_binomial_fit(y_train_shape, x_train))[1]
