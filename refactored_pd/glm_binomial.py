@@ -55,7 +55,6 @@ if __name__ == "__main__":
 
     custom_rcParams = {"figure.figsize": (8, 6), "axes.labelsize": 12}
 
-
     instance = OneHotEncoding(custom_rcParams, imputer_cat, "statistics")
     
     x_train = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[0]
@@ -63,16 +62,8 @@ if __name__ == "__main__":
     y_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[3]
     x_test = instance.split_xtrain_ytrain(df_loan_float, target=df_loan_float["GB"])[1]
 
-    print(x_test)
-
     x_test = sm.add_constant(x_test.values)
 
     y_train_shape = y_train.values.reshape(-1,1)
-    #print(y_train_shape)
 
     model = (glm_binomial_fit(y_train_shape, x_train))[1]
-    #print(model.predict(x_test))
-    
-    # with open('glm_binomial.pkl','wb') as file:
-    #     pickle.dump(model, file)
-

@@ -137,12 +137,3 @@ class EDA(Base):
 	    VIF = 1/(1-res_ols.rsquared_adj**2)
 	    
 	    return VIF
-
-# -----------------------------------------------------------Testing-------------------------------------------------
-	
-if __name__ == "__main__":
-
-	r = scipy.stats.pointbiserialr(df_loan["AGE"], df_loan["GB"])
-	print(r)
-
-	Corr_Plot = Correlation_Plot(dataframe)

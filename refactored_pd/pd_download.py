@@ -47,14 +47,3 @@ def data_cleaning(file_path):
     df_cat['NAT'] = df_cat['NAT'].replace('Others','RS')
 
     return data_types, df_cat, df_float
-
-
-# ---------------------------------------------------------Testing-----------------------------------------------------------------------
-
-# if __name__ == "__main__":
-
-#     file_path = "./KGB.sas7bdat"
-#     data_types, df_loan_categorical, df_loan_float = data_cleaning(file_path)
-#     print(df_loan_categorical)
-
-
