@@ -243,5 +243,3 @@ class CooksDisQuantRes(QuantileResiduals):
         super().plotting("Cooks Distance", "x", "y")
 
         return self.fig
-
-# -----------------------------------------------Testing------------------------------------------------------------------
